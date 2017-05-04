@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "478336960932",
+    "firebase_url": "https://restogo-9729a.firebaseio.com",
+    "project_id": "restogo-9729a",
+    "storage_bucket": "restogo-9729a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478336960932:android:e071e626fe80c9f4",
+        "android_client_info": {
+          "package_name": "ar.com.utn.restogo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478336960932-7ijles22n9lrhemhok5ogg5vpjlaielr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.com.utn.restogo",
+            "certificate_hash": "684d590c22b321c4a7b8cd19aa1afdd353f81d97"
+          }
+        },
+        {
+          "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbpwP1SP9tbDjcL5k90uTDhICw2hXW53U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,5 +4,35 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <!--Menu-->
+    <string name="nav_mapa">Mapa</string>
+    <string name="nav_cuenta">Cuenta</string>
+    <string name="nav_iniciar_sesion">Iniciar sesión</string>
+    <string name="nav_cerrar_sesion">Cerrar sesión</string>
+    <string name="nav_nombre_usuario">Sesión no iniciada</string>
+
+    <!--Login-->
+    <string name="hint_login_email">Email</string>
+    <string name="hint_login_password">Contraseña</string>
+    <string name="link_registro">No tiene cuenta? Regístrese</string>
+    <string name="botonLogin">Login</string>
+
+    <!--Registro-->
+    <string name="botonCrearCuenta">Crear cuenta</string>
+
+    <!--Msjs error-->
+    <string name="error_campo_requerido">Campo requerido</string>
+    <string name="error_autenticacion">Error en la autenticación</string>
+    <string name="error_crear_cuenta">Error al crear la cuenta</string>
+
+    <!--Msjs-->
+    <string name="msj_espere">Espere</string>
+    <string name="msj_cargando">Cargando</string>
+
     <string name="action_settings">Settings</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_registro">Registro</string>
+
+    <string name="web_client_id">478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com</string>
+
 </resources>

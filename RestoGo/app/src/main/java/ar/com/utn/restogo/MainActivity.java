@@ -1,7 +1,9 @@
 package ar.com.utn.restogo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -9,9 +11,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private FirebaseAuth auth;
+
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +36,37 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        auth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        FirebaseUser user = auth.getCurrentUser();
+        actualizarDatosUsuario(user);
+    }
+
+    private void actualizarDatosUsuario(FirebaseUser user) {
+        TextView txtNombreUsuario = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtNombreUsuario);
+        TextView txtEmailUsuario = (TextView) navigationView.getHeaderView(0).findViewById(R.id.txtEmailUsuario);
+        MenuItem itemIniciarSesion = navigationView.getMenu().findItem(R.id.nav_iniciar_sesion);
+        MenuItem itemCerrarSesion = navigationView.getMenu().findItem(R.id.nav_cerrar_sesion);
+
+        if (user != null) {
+            txtNombreUsuario.setText(user.getDisplayName());
+            txtEmailUsuario.setText(user.getEmail());
+            itemIniciarSesion.setEnabled(false);
+            itemCerrarSesion.setEnabled(true);
+        } else {
+            txtNombreUsuario.setText(getString(R.string.nav_nombre_usuario));
+            txtEmailUsuario.setText("");
+            itemIniciarSesion.setEnabled(true);
+            itemCerrarSesion.setEnabled(false);
+        }
     }
 
     @Override
@@ -63,20 +102,22 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_mapa) {
+            cargarFragment(MapFragment.newInstance());
+        } else if (id == R.id.nav_iniciar_sesion) {
+            startActivity(new Intent(this, LoginActivity.class));
+        } else if (id == R.id.nav_cerrar_sesion) {
+            auth.signOut();
+            actualizarDatosUsuario(auth.getCurrentUser());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void cargarFragment(Fragment fragment) {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                fragment).commit();
     }
 }
