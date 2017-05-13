@@ -22,14 +22,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
 
     public MapFragment() {
-        // Required empty public constructor
-    }
-
-    public static MapFragment newInstance() {
-        MapFragment fragment = new MapFragment();
         Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
+        setArguments(args);
     }
 
     @Override

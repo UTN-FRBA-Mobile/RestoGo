@@ -1,19 +1,31 @@
 package ar.com.utn.restogo;
 
-
-import android.content.Context;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 
 public class RegistroFragment extends Fragment {
 
-    private RegistroFragmentInteractionListener listener;
+    public final int RESULT_OK = 0;
+
+    private FirebaseAuth auth = FirebaseAuth.getInstance();
+    private ProgressDialog progressDialog;
 
     private TextView txtEmail;
     private TextView txtPassword;
@@ -28,7 +40,6 @@ public class RegistroFragment extends Fragment {
         txtEmail = (TextView) view.findViewById(R.id.txtEmail);
         txtPassword = (TextView) view.findViewById(R.id.txtPassword);
         btnCrearCuenta = (Button) view.findViewById(R.id.btnCrearCuenta);
-
         btnCrearCuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,30 +75,40 @@ public class RegistroFragment extends Fragment {
         if (cancelar) {
             campoConError.requestFocus();
         } else {
-            listener.crearCuenta(email, password);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        if (context instanceof RegistroFragmentInteractionListener) {
-            listener = (RegistroFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement RegistroFragmentInteractionListener");
+            crearCuenta(email, password);
         }
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
-        listener = null;
     }
 
-    public interface RegistroFragmentInteractionListener {
-        void crearCuenta(String email, String password);
+    public void crearCuenta(String email, String password) {
+        progressDialog = ProgressDialog.show(getContext(), getString(R.string.msj_espere),
+                getString(R.string.msj_cargando), true);
+
+        auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+
+                        if (task.isSuccessful()) {
+                            getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                        } else {
+                            Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
+    private String handleExceptionCode(FirebaseAuthException exception){
+        switch (exception.getErrorCode()){
+            default:
+                return exception.getMessage();
+        }
+    }
 }
