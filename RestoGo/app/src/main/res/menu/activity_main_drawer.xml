@@ -18,4 +18,15 @@
         </menu>
     </item>
 
+    <item android:title="@string/nav_carga_datos">
+        <menu>
+            <item
+                android:id="@+id/nav_carga_tipo_comida"
+                android:title="@string/nav_carga_tipo_comida"/>
+            <item
+                android:id="@+id/nav_cerrar_sesion"
+                android:title="@string/nav_cerrar_sesion"/>
+        </menu>
+    </item>
+
 </menu>

@@ -4,8 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
+    android:layout_margin="@dimen/fragment_margin"
     tools:context="ar.com.utn.restogo.RegistroFragment">
 
     <android.support.design.widget.TextInputLayout

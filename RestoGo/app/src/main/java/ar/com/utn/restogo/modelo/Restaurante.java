@@ -2,9 +2,11 @@ package ar.com.utn.restogo.modelo;
 
 import android.location.Location;
 
+import java.util.ArrayList;
+import java.util.Set;
+
 public class Restaurante {
     private String descripcion;
-    private Location ubicacion;
 
     public String getDescripcion() {
         return descripcion;

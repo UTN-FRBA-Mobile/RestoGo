@@ -34,4 +34,8 @@
 
     <string name="web_client_id">478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com</string>
 
+    <string name="nav_carga_datos">Cargar Datos</string>
+    <string name="nav_carga_tipo_comida">Tipo Comida</string>
+
+
 </resources>

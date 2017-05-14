@@ -1,23 +1,22 @@
 package ar.com.utn.restogo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+
+import ar.com.utn.restogo.modelo.Restaurante;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -129,6 +128,12 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_cerrar_sesion) {
             auth.signOut();
             actualizarDatosUsuario(auth.getCurrentUser());
+        } else if (id == R.id.nav_carga_tipo_comida) {
+            /*Temporal para cargar un registro*/
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            Restaurante restaurante = new Restaurante();
+            restaurante.setDescripcion("La Farola");
+            database.getReference("restaurantes").push().setValue(restaurante);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
