@@ -6,10 +6,16 @@
 
     <!--Menu-->
     <string name="nav_mapa">Mapa</string>
+    <string name="nav_publicar">Publicar</string>
     <string name="nav_cuenta">Cuenta</string>
     <string name="nav_iniciar_sesion">Iniciar sesión</string>
     <string name="nav_cerrar_sesion">Cerrar sesión</string>
     <string name="nav_nombre_usuario">Sesión no iniciada</string>
+
+    <!--Publicar-->
+    <string name="hint_nombre_restaurant">Nombre</string>
+    <string name="hint_direcc_restaurant">Dirección</string>
+    <string name="hint_tipos_comida">Tipos de comida</string>
 
     <!--Login-->
     <string name="hint_login_email">Email</string>

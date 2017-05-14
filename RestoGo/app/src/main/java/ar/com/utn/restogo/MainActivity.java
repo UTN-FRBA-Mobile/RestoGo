@@ -118,6 +118,14 @@ public class MainActivity extends AppCompatActivity
                     .addToBackStack("mapa")
                     .commit();
             showUpButton(true);
+        }
+        else if (id == R.id.nav_publicar){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.fragment_container,new PublicarFragment())
+                    .addToBackStack("publicar")
+                    .commit();
+            showUpButton(true);
         } else if (id == R.id.nav_iniciar_sesion) {
             getSupportFragmentManager()
                     .beginTransaction()
