@@ -1,4 +1,4 @@
-#Aplicación - RestoGo
+# Aplicación - RestoGo
 
 Se trata de una aplicación amigable para poder encontrar restaurantes cercanos mediante la ubicación para luego pedir a domicilio, o incluso poder reservar y elegir el menú con antelación !
 
