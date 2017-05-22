@@ -17,6 +17,22 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    signingConfigs {
+        debug {
+            storeFile file("restoGo.jks")
+            storePassword 'restogo'
+            keyAlias 'RestoGo'
+            keyPassword 'restogo'
+        }
+
+        release {
+            storeFile file("restoGo.jks")
+            storePassword 'restogo'
+            keyAlias 'RestoGo'
+            keyPassword 'restogo'
+        }
+    }
 }
 
 dependencies {
