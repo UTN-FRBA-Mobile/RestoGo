@@ -1,6 +1,7 @@
 package ar.com.utn.restogo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -11,7 +12,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,10 +25,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import ar.com.utn.restogo.modelo.Restaurante;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.FacadeGoogle, GoogleApiClient.OnConnectionFailedListener{
 
     private FirebaseAuth auth;
-
+    private GoogleApiClient mGoogleApiClient;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawer;
     private ActionBar mActionBar;
@@ -56,6 +62,16 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container, new RestaurantesFragment(), "RestaurantesFragment")
                     .commit();
         }
+
+        /*GoogleClient*/
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API,
+                        new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                .requestEmail()
+                                .requestIdToken(getString(R.string.web_client_id))
+                                .build())
+                .build();
 
         /*Firebase*/
         auth = FirebaseAuth.getInstance();
@@ -181,5 +197,15 @@ public class MainActivity extends AppCompatActivity
             mDrawerToggle.setToolbarNavigationClickListener(null);
             mToolBarNavigationListenerIsRegistered = false;
         }
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this, "Error al conectar GoogleAPIClient", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public GoogleApiClient getClient() {
+        return mGoogleApiClient;
     }
 }

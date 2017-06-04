@@ -1,14 +1,11 @@
 package ar.com.utn.restogo;
 
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +17,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
@@ -32,13 +28,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class LoginFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener {
+public class LoginFragment extends Fragment {
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
 
     private FirebaseAuth auth;
-    private GoogleApiClient googleApiClient;
 
     private ProgressDialog progressDialog;
 
@@ -53,7 +48,6 @@ public class LoginFragment extends Fragment implements GoogleApiClient.OnConnect
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_login, container, false);
         auth = FirebaseAuth.getInstance();
-        configGoogleSignInApiClient();
 
         txtEmail = (TextView) view.findViewById(R.id.txtEmail);
         txtPassword = (TextView) view.findViewById(R.id.txtPassword);
@@ -114,22 +108,8 @@ public class LoginFragment extends Fragment implements GoogleApiClient.OnConnect
     }
 
     private void googleLogin() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(((FacadeGoogle)getActivity()).getClient());
         startActivityForResult(signInIntent, RC_SIGN_IN);
-    }
-
-    private void configGoogleSignInApiClient() {
-        if (googleApiClient != null) {
-            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.web_client_id))
-                    .requestEmail()
-                    .build();
-
-            googleApiClient = new GoogleApiClient.Builder(getActivity())
-                    .enableAutoManage(getActivity(), this)
-                    .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                    .build();
-        }
     }
 
     public void loginApp(String email, String password) {
@@ -209,8 +189,7 @@ public class LoginFragment extends Fragment implements GoogleApiClient.OnConnect
         Toast.makeText(getActivity(), getString(R.string.error_autenticacion), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        Toast.makeText(getActivity(), "Error al conectar GoogleAPIClient", Toast.LENGTH_SHORT).show();
+    public interface FacadeGoogle{
+        public GoogleApiClient getClient();
     }
 }
