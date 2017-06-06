@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -25,6 +26,7 @@ import ar.com.utn.restogo.adapter.RestauranteAdapter;
 
 public class RestaurantesFragment extends Fragment {
     private String TAG = "RestaurantesFragment";
+    private RelativeLayout mLoadingView;
     private RecyclerView mRecyclerView;
     private RestauranteAdapter mAdapter;
     private FirebaseDatabase database;
@@ -41,15 +43,23 @@ public class RestaurantesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mLoadingView = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mAdapter = new RestauranteAdapter(getContext());
+        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+                mLoadingView.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.VISIBLE);
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
                /*DataBase*/
         database = FirebaseDatabase.getInstance();
         restaurantesReference = database.getReference("restaurantes");
-
         restaurantesReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
