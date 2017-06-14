@@ -16,6 +16,11 @@
     <string name="hint_nombre_restaurant">Nombre</string>
     <string name="hint_direcc_restaurant">Dirección</string>
     <string name="hint_tipos_comida">Tipos de comida</string>
+    <string name="dialog_selecc_comidas">Seleccione tipos de comida</string>
+    <string name="text_horario">Horario</string>
+    <string name="botonApertura">Apertura</string>
+    <string name="botonCierre">Cierre</string>
+    <string name="botonCamara">Cámara</string>
 
     <!--Login-->
     <string name="hint_login_email">Email</string>
@@ -34,9 +39,8 @@
     <!--Msjs-->
     <string name="msj_espere">Espere</string>
     <string name="msj_cargando">Cargando</string>
-
-    <string name="title_activity_login">Login</string>
-    <string name="title_activity_registro">Registro</string>
+    <string name="btn_ok">Ok</string>
+    <string name="btn_cancelar">Cancelar</string>
 
     <string name="web_client_id">478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com</string>
 
