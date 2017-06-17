@@ -4,10 +4,11 @@ import android.location.Location;
 
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Set;
 
-public class Restaurante {
+public class Restaurante implements Serializable{
     private String descripcion;
     private String url;
     private Double latitute;

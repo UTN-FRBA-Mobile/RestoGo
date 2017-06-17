@@ -3,13 +3,17 @@ package ar.com.utn.restogo;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -47,7 +51,7 @@ public class RestaurantesFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         mLoadingView = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mAdapter = new RestauranteAdapter(getContext());
+        mAdapter = new RestauranteAdapter(getContext(), getActivity().getSupportFragmentManager());
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {

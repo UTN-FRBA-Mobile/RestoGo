@@ -2,13 +2,11 @@ package ar.com.utn.restogo.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +15,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.NoSuchElementException;
 
 import ar.com.utn.restogo.R;
+import ar.com.utn.restogo.RestauranteFragment;
 import ar.com.utn.restogo.modelo.Restaurante;
 import ar.com.utn.restogo.storage.DistanceLoader;
 import ar.com.utn.restogo.storage.ImageLoader;
 
 public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.ViewHolder> {
+    private FragmentManager fragmentManager;
     private LayoutInflater layoutInflater;
     private ArrayList<String> keys = new ArrayList<String>();
     private ArrayList<Restaurante> restaurantes = new ArrayList<Restaurante>();
 
-    public RestauranteAdapter(Context context) {
-        layoutInflater = LayoutInflater.from(context);
+    public RestauranteAdapter(Context context, FragmentManager fragmentManager) {
+        this.fragmentManager = fragmentManager;
+        this.layoutInflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -40,14 +39,14 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.item_restaurante, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Restaurante unRestante = restaurantes.get(position);
+        final Restaurante unRestante = restaurantes.get(position);
 
         holder.nameView.setText(unRestante.getDescripcion());
         if (unRestante.getUrl() != null){
@@ -57,6 +56,17 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         if (unRestante.getLocation() != null){
             DistanceLoader.instance.loadDistance(new OnNewDistance(unRestante.getLocation(), holder.distanceView));
         }
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RestauranteFragment restauranteFragment = RestauranteFragment.newInstance(unRestante);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, restauranteFragment, "RestauranteFragment")
+                        .addToBackStack("restaurante")
+                        .commit();
+            }
+        });
     }
 
     @Override
@@ -143,11 +153,7 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         public void onSuccessNewDistance(Location newLocation){
             distanceView.setVisibility(View.VISIBLE);
             float distance = location.distanceTo(newLocation);
-            if (distance>new Float(1000)){
-                distanceView.setText( (distance / 1000) + " kms");
-            } else {
-                distanceView.setText(distance + " mts");
-            }
+            distanceView.setText("Dist: " + String.format("%.02f", (distance / 1000)) + " kms");
         }
 
         public void onFailedCalculate(){
