@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +22,7 @@ import java.util.NoSuchElementException;
 
 import ar.com.utn.restogo.R;
 import ar.com.utn.restogo.modelo.Restaurante;
+import ar.com.utn.restogo.storage.DistanceLoader;
 import ar.com.utn.restogo.storage.ImageLoader;
 
 public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.ViewHolder> {
@@ -51,6 +53,9 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         if (unRestante.getUrl() != null){
             holder.imagePanel.setVisibility(View.VISIBLE);
             ImageLoader.instance.loadImage(unRestante.getUrl(), new OnLoadImage(holder.imagePanel,holder.imageprogressBar, holder.imageView));
+        }
+        if (unRestante.getLocation() != null){
+            DistanceLoader.instance.loadDistance(new OnNewDistance(unRestante.getLocation(), holder.distanceView));
         }
     }
 
@@ -123,6 +128,30 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
 
         public void onFailedLoad(){
             imagePanel.setVisibility(View.GONE);
+        }
+    }
+
+    public class OnNewDistance {
+        Location location;
+        TextView distanceView;
+
+        private OnNewDistance(Location location, TextView distanceView) {
+            this.location = location;
+            this.distanceView = distanceView;
+        }
+
+        public void onSuccessNewDistance(Location newLocation){
+            distanceView.setVisibility(View.VISIBLE);
+            float distance = location.distanceTo(newLocation);
+            if (distance>new Float(1000)){
+                distanceView.setText( (distance / 1000) + " kms");
+            } else {
+                distanceView.setText(distance + " mts");
+            }
+        }
+
+        public void onFailedCalculate(){
+            distanceView.setVisibility(View.GONE);
         }
     }
 }

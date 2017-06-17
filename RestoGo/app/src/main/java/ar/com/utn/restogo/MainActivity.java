@@ -1,8 +1,12 @@
 package ar.com.utn.restogo;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -18,22 +22,29 @@ import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ar.com.utn.restogo.modelo.FacadeMain;
 import ar.com.utn.restogo.modelo.Restaurante;
+import ar.com.utn.restogo.storage.DistanceLoader;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoginFragment.FacadeGoogle, GoogleApiClient.OnConnectionFailedListener{
+        implements NavigationView.OnNavigationItemSelectedListener, FacadeMain, GoogleApiClient.OnConnectionFailedListener{
 
     private FirebaseAuth auth;
     private GoogleApiClient mGoogleApiClient;
+    private FusedLocationProviderClient mFusedLocationClient;
     private ActionBarDrawerToggle mDrawerToggle;
     private DrawerLayout mDrawer;
     private ActionBar mActionBar;
     private boolean mToolBarNavigationListenerIsRegistered = false;
     private NavigationView navigationView;
+    private Location mlocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +84,35 @@ public class MainActivity extends AppCompatActivity
                                 .build())
                 .build();
 
+        /*Location Manager*/
+        boolean permissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if(permissionGranted) {
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 200);
+        }
+
         /*Firebase*/
         auth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        boolean permissionGranted = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+
+        if(permissionGranted) {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        mlocation = location;
+                        DistanceLoader.instance.newLocation(location);
+                    }
+                }
+            });
+        }
     }
 
     @Override
@@ -157,6 +195,11 @@ public class MainActivity extends AppCompatActivity
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             Restaurante restaurante = new Restaurante();
             restaurante.setDescripcion("La Farola");
+
+            if (mlocation != null) {
+                restaurante.setLatitute(mlocation.getLatitude());
+                restaurante.setLongitute(mlocation.getLongitude());
+            }
             database.getReference("restaurantes").push().setValue(restaurante);
         }
 

@@ -18,15 +18,15 @@ import android.widget.Toast;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
-import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import ar.com.utn.restogo.modelo.FacadeMain;
 
 public class LoginFragment extends Fragment {
 
@@ -108,7 +108,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void googleLogin() {
-        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(((FacadeGoogle)getActivity()).getClient());
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(((FacadeMain)getActivity()).getClient());
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
@@ -187,9 +187,5 @@ public class LoginFragment extends Fragment {
 
     private void errorLogin() {
         Toast.makeText(getActivity(), getString(R.string.error_autenticacion), Toast.LENGTH_SHORT).show();
-    }
-
-    public interface FacadeGoogle{
-        public GoogleApiClient getClient();
     }
 }

@@ -1,5 +1,6 @@
 package ar.com.utn.restogo;
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,13 +17,11 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import ar.com.utn.restogo.modelo.Restaurante;
 import ar.com.utn.restogo.adapter.RestauranteAdapter;
+import ar.com.utn.restogo.modelo.Restaurante;
 
 public class RestaurantesFragment extends Fragment {
     private String TAG = "RestaurantesFragment";
@@ -32,6 +31,9 @@ public class RestaurantesFragment extends Fragment {
     private FirebaseDatabase database;
     private DatabaseReference restaurantesReference;
     private HashMap<String, Restaurante> restaurantes = new HashMap<String, Restaurante>();
+
+    /*Location*/
+    private Location mLastLocation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,7 +59,7 @@ public class RestaurantesFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-               /*DataBase*/
+        /*DataBase*/
         database = FirebaseDatabase.getInstance();
         restaurantesReference = database.getReference("restaurantes");
         restaurantesReference.addChildEventListener(new ChildEventListener() {

@@ -7,9 +7,9 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import java.util.Date;
 
-import static com.google.android.gms.internal.zzt.TAG;
-
 public class FCMInstanceIdService extends FirebaseInstanceIdService {
+
+    private static final String TAG = "FCMInstanceIdService";
 
     public FCMInstanceIdService() {
     }
