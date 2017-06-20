@@ -1,7 +1,6 @@
 package ar.com.utn.restogo;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,8 +18,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.iid.FirebaseInstanceId;
 
-public class RegistroFragment extends Fragment {
+import org.json.JSONObject;
+
+import ar.com.utn.restogo.conexion.ConstructorUrls;
+import ar.com.utn.restogo.conexion.TaskListener;
+import ar.com.utn.restogo.conexion.TaskRequestUrl;
+
+public class RegistroFragment extends Fragment implements TaskListener {
 
     public final int RESULT_OK = 0;
 
@@ -77,6 +83,10 @@ public class RegistroFragment extends Fragment {
         } else {
             crearCuenta(email, password);
         }
+
+        //Se manda el email y el token asociado al dispositivo al server
+        String token = FirebaseInstanceId.getInstance().getToken();
+        new TaskRequestUrl(this).execute(ConstructorUrls.armarURL("Clientes"), ConstructorUrls.getJSONUsuario(email, token), "POST");
     }
 
     @Override
@@ -84,7 +94,7 @@ public class RegistroFragment extends Fragment {
         super.onDetach();
     }
 
-    public void crearCuenta(String email, String password) {
+    public void crearCuenta(final String email, String password) {
         progressDialog = ProgressDialog.show(getContext(), getString(R.string.msj_espere),
                 getString(R.string.msj_cargando), true);
 
@@ -95,7 +105,6 @@ public class RegistroFragment extends Fragment {
                         if (progressDialog != null) {
                             progressDialog.dismiss();
                         }
-
                         if (task.isSuccessful()) {
                             getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         } else {
@@ -111,4 +120,16 @@ public class RegistroFragment extends Fragment {
                 return exception.getMessage();
         }
     }
+
+
+    @Override
+    public void inicioRequest() {
+        //TODO
+    }
+
+    @Override
+    public void finRequest(JSONObject json) {
+        //TODO
+    }
+
 }
