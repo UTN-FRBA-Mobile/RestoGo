@@ -189,14 +189,37 @@
             android:scaleType="centerCrop"
             android:src="@drawable/no_image" />
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/btnCamara"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/botonCamara"
-            android:drawableLeft="@drawable/ic_menu_camera"/>
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnCamara"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/botonCamara"
+                android:drawableLeft="@drawable/ic_menu_camera"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/btnGaleria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/botonGaleria"
+                android:drawableLeft="@drawable/ic_menu_gallery"/>
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/btnPublicar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/botonPublicar" />
 
     </LinearLayout>
 </ScrollView>

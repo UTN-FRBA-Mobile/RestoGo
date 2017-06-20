@@ -28,8 +28,6 @@ import ar.com.utn.restogo.conexion.TaskRequestUrl;
 
 public class RegistroFragment extends Fragment implements TaskListener {
 
-    public final int RESULT_OK = 0;
-
     private FirebaseAuth auth = FirebaseAuth.getInstance();
     private ProgressDialog progressDialog;
 

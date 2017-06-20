@@ -1,6 +1,6 @@
 package ar.com.utn.restogo;
 
-
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -14,8 +14,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,21 +27,26 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import ar.com.utn.restogo.modelo.Restaurante;
 import ar.com.utn.restogo.modelo.TipoComida;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +59,9 @@ public class PublicarFragment extends Fragment {
 
     private static final int RC_SELECC_UBIC = 9002;
     private static final int RC_SACAR_FOTO = 9003;
+    private static final int RC_PERMISO_LECTURA = 9005;
+    private static final int RC_SELECC_FOTO = 9006;
+
     public static final String SELECTED_PICTURE = "selectedImage";
 
     private static final String TAG = "PublicarFragment";
@@ -67,6 +78,7 @@ public class PublicarFragment extends Fragment {
     private Unbinder unbinder;
 
     String currentPhotoPath;
+    private Place place;
 
     public PublicarFragment() {
         // Required empty public constructor
@@ -201,6 +213,7 @@ public class PublicarFragment extends Fragment {
             } catch (IOException ex) {
                 Log.d(TAG, "Error al crear el archivo para la foto");
             }
+            // Lanza el intent solo si pudo crear el archivo
             if (photoFile != null) {
                 // El authorities (2do param) depende del FileProvider del manifest
                 Uri photoURI = FileProvider.getUriForFile(getActivity(), "ar.com.utn.restogo.fileprovider", photoFile);
@@ -209,6 +222,75 @@ public class PublicarFragment extends Fragment {
                 startActivityForResult(intent, RC_SACAR_FOTO);
             }
         }
+    }
+
+    @OnClick(R.id.btnGaleria)
+    void abrirGaleria() {
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                Toast.makeText(getContext(), R.string.permiso_lectura_almac, Toast.LENGTH_LONG).show();
+            }
+            else {
+                ActivityCompat.requestPermissions(getActivity(), new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE }, RC_PERMISO_LECTURA);
+            }
+            return;
+        }
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        gallery.setType("image/*");
+        startActivityForResult(gallery, RC_SELECC_FOTO);
+    }
+
+    @OnClick(R.id.btnPublicar)
+    void publicar() {
+        boolean cancelar = false;
+        View campoConError = null;
+
+        txtNombre.setError(null);
+        txtDireccion.setError(null);
+
+        String descripcion = txtNombre.getText().toString();
+        String direccion = txtDireccion.getText().toString();
+        String horaApertura = txtHoraApertura.getText().toString();
+        String horaCierre = txtHoraCierre.getText().toString();
+
+        if (TextUtils.isEmpty(horaCierre)) {
+            txtHoraCierre.setError(getString(R.string.error_campo_requerido));
+            campoConError = txtHoraCierre;
+            cancelar = true;
+        }
+        if (TextUtils.isEmpty(horaApertura)) {
+            txtHoraApertura.setError(getString(R.string.error_campo_requerido));
+            campoConError = txtHoraApertura;
+            cancelar = true;
+        }
+        if (TextUtils.isEmpty(direccion)) {
+            txtDireccion.setError(getString(R.string.error_campo_requerido));
+            campoConError = txtDireccion;
+            cancelar = true;
+        }
+        if (TextUtils.isEmpty(descripcion)) {
+            txtNombre.setError(getString(R.string.error_campo_requerido));
+            campoConError = txtNombre;
+            cancelar = true;
+        }
+
+        if (cancelar) {
+            campoConError.requestFocus();
+            return;
+        }
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        Restaurante restaurante = new Restaurante();
+        restaurante.setDescripcion(descripcion);
+        restaurante.setDireccion(direccion);
+        restaurante.setLatitute(place.getLatLng().latitude);
+        restaurante.setLongitute(place.getLatLng().longitude);
+        restaurante.setHoraApertura(horaApertura);
+        restaurante.setHoraCierre(horaCierre);
+        // TODO set img, dias, tipos de comida
+
+        database.getReference("restaurantes").push().setValue(restaurante);
     }
 
     /**
@@ -235,6 +317,26 @@ public class PublicarFragment extends Fragment {
         imageView.setImageBitmap(bitmap);
     }
 
+    private void saveImage(Uri data) {
+        try {
+            InputStream input = getActivity().getContentResolver().openInputStream(data);
+            assert input != null;
+            File file = createImageFile();
+            FileOutputStream output = new FileOutputStream(file);
+            byte[] buffer = new byte[1024];
+            int len = input.read(buffer);
+            while (len != -1) {
+                output.write(buffer, 0, len);
+                len = input.read(buffer);
+            };
+            output.close();
+            input.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public static void grantPermissionsToUri(Context context, Intent intent, Uri uri) {
         List<ResolveInfo> resInfoList = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
         for (ResolveInfo resolveInfo : resInfoList) {
@@ -248,7 +350,7 @@ public class PublicarFragment extends Fragment {
         switch (requestCode) {
             case RC_SELECC_UBIC:
                 if (resultCode == RESULT_OK) {
-                    Place place = PlaceAutocomplete.getPlace(getActivity(), data);
+                    place = PlaceAutocomplete.getPlace(getActivity(), data);
                     txtDireccion.setText(place.getName());
                 }
                 break;
@@ -262,6 +364,31 @@ public class PublicarFragment extends Fragment {
                 else {
                     new File(currentPhotoPath).delete();
                 }
+                break;
+            case RC_SELECC_FOTO:
+                if (resultCode == RESULT_OK && data != null) {
+                    saveImage(data.getData());
+                    Intent resultData = new Intent();
+                    resultData.putExtra(SELECTED_PICTURE, currentPhotoPath);
+                    getActivity().setResult(RESULT_OK, resultData);
+                    loadImage();
+                }
+                break;
+            default:
+                break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case RC_PERMISO_LECTURA:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    abrirGaleria();
+                }
+                break;
+            default:
                 break;
         }
     }

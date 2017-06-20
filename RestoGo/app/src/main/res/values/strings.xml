@@ -21,6 +21,8 @@
     <string name="botonApertura">Apertura</string>
     <string name="botonCierre">Cierre</string>
     <string name="botonCamara">Cámara</string>
+    <string name="botonGaleria">Galería</string>
+    <string name="botonPublicar">Publicar</string>
 
     <!--Login-->
     <string name="hint_login_email">Email</string>
@@ -41,6 +43,8 @@
     <string name="msj_cargando">Cargando</string>
     <string name="btn_ok">Ok</string>
     <string name="btn_cancelar">Cancelar</string>
+    <string name="permiso_localizacion">Se requiere acceso a su ubicación para precisión del mapa</string>
+    <string name="permiso_lectura_almac">Se requiere acceso de lectura al almacenamiento externo</string>
 
     <string name="web_client_id">478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com</string>
 

@@ -166,9 +166,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_mapa) {
+            MapFragment mapFragment;
+            if (mlocation != null) {
+                mapFragment = MapFragment.newInstance(mlocation.getLatitude(), mlocation.getLongitude());
+            } else {
+                mapFragment = MapFragment.newInstance(null, null);
+            }
             getSupportFragmentManager()
                     .beginTransaction()
-                    .replace(R.id.fragment_container,new MapFragment())
+                    .replace(R.id.fragment_container, mapFragment)
                     .addToBackStack("mapa")
                     .commit();
             showUpButton(true);
@@ -250,5 +256,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     public GoogleApiClient getClient() {
         return mGoogleApiClient;
+    }
+
+    public Location getLocation() {
+        return mlocation;
     }
 }
