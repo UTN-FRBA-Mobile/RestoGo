@@ -3,17 +3,13 @@ package ar.com.utn.restogo;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -25,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
 
 import ar.com.utn.restogo.adapter.RestauranteAdapter;
+import ar.com.utn.restogo.conexion.Utils;
 import ar.com.utn.restogo.modelo.Restaurante;
 
 public class RestaurantesFragment extends Fragment {
@@ -49,6 +46,12 @@ public class RestaurantesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        if (!Utils.conexionAInternetOk(getActivity())) {
+            Toast.makeText(getContext(), getString(R.string.error_internet), Toast.LENGTH_LONG).show();
+            //Deja que siga porque si vuelve la conexion firebase retoma
+        }
+
         mLoadingView = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mAdapter = new RestauranteAdapter(getContext(), getActivity().getSupportFragmentManager());

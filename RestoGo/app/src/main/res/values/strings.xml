@@ -35,12 +35,16 @@
 
     <!--Msjs error-->
     <string name="error_campo_requerido">Campo requerido</string>
+    <string name="error_campo_formato">Formato incorrecto</string>
     <string name="error_autenticacion">Error en la autenticación</string>
     <string name="error_crear_cuenta">Error al crear la cuenta</string>
+    <string name="error_publicar_img">Error al subir la imagen. No se publicó</string>
+    <string name="error_internet">No hay conexión a internet</string>
 
     <!--Msjs-->
     <string name="msj_espere">Espere</string>
     <string name="msj_cargando">Cargando</string>
+    <string name="msj_inicie_sesion">Debe iniciar sesión primero</string>
     <string name="btn_ok">Ok</string>
     <string name="btn_cancelar">Cancelar</string>
     <string name="permiso_localizacion">Se requiere acceso a su ubicación para precisión del mapa</string>

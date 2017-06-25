@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -34,7 +35,12 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -46,6 +52,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import ar.com.utn.restogo.conexion.Utils;
 import ar.com.utn.restogo.modelo.Restaurante;
 import ar.com.utn.restogo.modelo.TipoComida;
 import butterknife.BindView;
@@ -62,7 +69,7 @@ public class PublicarFragment extends Fragment {
     private static final int RC_PERMISO_LECTURA = 9005;
     private static final int RC_SELECC_FOTO = 9006;
 
-    public static final String SELECTED_PICTURE = "selectedImage";
+    private static final String SELECTED_PICTURE = "selectedImage";
 
     private static final String TAG = "PublicarFragment";
 
@@ -77,7 +84,7 @@ public class PublicarFragment extends Fragment {
     @BindView(R.id.btnCamara) Button btnCamara;
     private Unbinder unbinder;
 
-    String currentPhotoPath;
+    private String currentPhotoPath;
     private Place place;
 
     public PublicarFragment() {
@@ -242,11 +249,18 @@ public class PublicarFragment extends Fragment {
 
     @OnClick(R.id.btnPublicar)
     void publicar() {
+        if (!Utils.conexionAInternetOk(getActivity())) {
+            Toast.makeText(getContext(), getString(R.string.error_internet), Toast.LENGTH_SHORT);
+            return;
+        }
+
         boolean cancelar = false;
         View campoConError = null;
 
         txtNombre.setError(null);
         txtDireccion.setError(null);
+        txtHoraApertura.setError(null);
+        txtHoraCierre.setError(null);
 
         String descripcion = txtNombre.getText().toString();
         String direccion = txtDireccion.getText().toString();
@@ -279,18 +293,43 @@ public class PublicarFragment extends Fragment {
             return;
         }
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        Restaurante restaurante = new Restaurante();
+        final Restaurante restaurante = new Restaurante();
         restaurante.setDescripcion(descripcion);
         restaurante.setDireccion(direccion);
         restaurante.setLatitute(place.getLatLng().latitude);
         restaurante.setLongitute(place.getLatLng().longitude);
         restaurante.setHoraApertura(horaApertura);
         restaurante.setHoraCierre(horaCierre);
-        // TODO set img, dias, tipos de comida
+        // TODO dias, tipos de comida
 
-        database.getReference("restaurantes").push().setValue(restaurante);
+        if (currentPhotoPath != null) {
+            // Si se cargo una imagen la sube y, si se subio bien, publica el restaurante
+            FirebaseStorage storage = FirebaseStorage.getInstance();
+            StorageReference storageRef = storage.getReference();
+
+            Uri file = Uri.fromFile(new File(currentPhotoPath));
+            StorageReference imgRef = storageRef.child("imagenes/" + file.getLastPathSegment());
+            UploadTask uploadTask = imgRef.putFile(file);
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getContext(), getString(R.string.error_publicar_img), Toast.LENGTH_LONG).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                    restaurante.setUrl(downloadUrl.toString());
+                    database.getReference("restaurantes").push().setValue(restaurante);
+                }
+            });
+        } else {
+            // Si no se cargo imagen, publica directo el restaurante
+            database.getReference("restaurantes").push().setValue(restaurante);
+        }
     }
 
     /**

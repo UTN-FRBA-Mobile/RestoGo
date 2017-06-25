@@ -118,8 +118,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseUser user = auth.getCurrentUser();
-        actualizarDatosUsuario(user);
+        actualizarDatosUsuario(auth.getCurrentUser());
     }
 
     private void actualizarDatosUsuario(FirebaseUser user) {
@@ -180,12 +179,16 @@ public class MainActivity extends AppCompatActivity
             showUpButton(true);
         }
         else if (id == R.id.nav_publicar){
-            getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.fragment_container,new PublicarFragment())
-                    .addToBackStack("publicar")
-                    .commit();
-            showUpButton(true);
+            if (auth.getCurrentUser() == null) {
+                Toast.makeText(this, getString(R.string.msj_inicie_sesion), Toast.LENGTH_SHORT).show();
+            } else {
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container,new PublicarFragment())
+                        .addToBackStack("publicar")
+                        .commit();
+                showUpButton(true);
+            }
         } else if (id == R.id.nav_iniciar_sesion) {
             getSupportFragmentManager()
                     .beginTransaction()

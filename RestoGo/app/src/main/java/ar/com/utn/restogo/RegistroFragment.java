@@ -74,6 +74,12 @@ public class RegistroFragment extends Fragment implements TaskListener {
             txtEmail.setError(getString(R.string.error_campo_requerido));
             campoConError = txtEmail;
             cancelar = true;
+        } else {
+            if(!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                txtEmail.setError(getString(R.string.error_campo_formato));
+                campoConError = txtEmail;
+                cancelar = true;
+            }
         }
 
         if (cancelar) {
@@ -81,10 +87,6 @@ public class RegistroFragment extends Fragment implements TaskListener {
         } else {
             crearCuenta(email, password);
         }
-
-        //Se manda el email y el token asociado al dispositivo al server
-        String token = FirebaseInstanceId.getInstance().getToken();
-        new TaskRequestUrl(this).execute(ConstructorUrls.armarURL("Clientes"), ConstructorUrls.getJSONUsuario(email, token), "POST");
     }
 
     @Override
@@ -104,6 +106,10 @@ public class RegistroFragment extends Fragment implements TaskListener {
                             progressDialog.dismiss();
                         }
                         if (task.isSuccessful()) {
+                            //Se manda el email y el token asociado al dispositivo al server
+                            String token = FirebaseInstanceId.getInstance().getToken();
+                            new TaskRequestUrl(RegistroFragment.this).execute(ConstructorUrls.armarURL("Clientes"), ConstructorUrls.getJSONUsuario(email, token), "POST");
+
                             getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         } else {
                             Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
