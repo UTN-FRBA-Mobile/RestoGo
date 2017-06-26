@@ -34,7 +34,7 @@
         <!-- Cambiar en PublicarFragment si cambia el authorities -->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="ar.com.utn.restogo.fileprovider"
+            android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
