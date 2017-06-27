@@ -19,16 +19,18 @@ public class FCMService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         //Log data to Log Cat
         Log.d(TAG, "From: " + remoteMessage.getFrom());
-        Log.d(TAG, "Notification Message Body: " + remoteMessage.getNotification().getBody());
+        Log.d(TAG, "Notification Message Body: " + remoteMessage.getData().get("body"));
+
         //create notification
-        createNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle());
+        createNotification(remoteMessage.getData().get("text"), remoteMessage.getData().get("title"), remoteMessage.getData().get("body"));
     }
 
-    private void createNotification( String messageBody, String title) {
-        Intent intent = new Intent(this, MainActivity. class );
+    private void createNotification( String messageBody, String title, String info) {
+        Intent intent = new Intent(this, InformacionPedidoActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent resultIntent = PendingIntent.getActivity( this , 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("message", info);
+        PendingIntent resultIntent = PendingIntent.getActivity(this , 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         Uri notificationSoundURI = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder mNotificationBuilder = new NotificationCompat.Builder( this)

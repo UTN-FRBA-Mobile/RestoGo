@@ -54,6 +54,7 @@
 
     <string name="nav_carga_datos">Cargar Datos</string>
     <string name="nav_carga_tipo_comida">Tipo Comida</string>
+    <string name="title_activity_pedido">Pedidos de reserva</string>
 
     <!--Msjs-->
     <string name="tipos_comida">Tipos de comida disponibles</string>

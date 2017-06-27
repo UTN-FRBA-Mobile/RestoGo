@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class Utils {
 
@@ -149,13 +150,14 @@ public class Utils {
     }
 
     //Se va a usar cuando el Cliente haga un pedido y ademas cuando el Resurante le de el OK por el mismo
-    public static void sendNotificationToUser(final String message) {
+    public static void sendNotificationToUser(Map<String, String> message, String titulo) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         DatabaseReference notifications = ref.child("notificationRequests");
 
         Map notification = new HashMap<>();
         notification.put("username", FirebaseInstanceId.getInstance().getToken());
         notification.put("message", message);
+        notification.put("titulo",titulo);
 
         notifications.push().setValue(notification);
     }
