@@ -43,6 +43,11 @@ public class Restaurante implements Serializable{
         return null;
     }
 
+    @Exclude
+    public String getHorario(){
+        return getHoraApertura() + " - " + getHoraCierre();
+    }
+
     public Double getLatitute() {
         return latitute;
     }

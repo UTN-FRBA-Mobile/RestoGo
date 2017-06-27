@@ -59,8 +59,8 @@ public class RestauranteFragment extends Fragment {
             ImageLoader.instance.loadImage(restaurante.getUrl(), new OnLoadImage(imagePanel,imageprogressBar, imageView));
         }
 
-        if (restaurante.getUbicacion() != null){
-            ubicacionText.setText(restaurante.getUbicacion());
+        if (restaurante.getDireccion() != null){
+            ubicacionText.setText(restaurante.getDireccion());
         }
 
         if (restaurante.getHorario() != null){
