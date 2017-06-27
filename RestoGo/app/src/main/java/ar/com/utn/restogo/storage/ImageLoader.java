@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
 import android.os.Looper;
-import android.widget.ImageView;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -16,7 +15,7 @@ import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import ar.com.utn.restogo.RegistroFragment;
+import ar.com.utn.restogo.adapter.OnLoadImage;
 import ar.com.utn.restogo.adapter.RestauranteAdapter;
 
 public class ImageLoader {
@@ -25,14 +24,14 @@ public class ImageLoader {
 
     private Executor executor = Executors.newFixedThreadPool(2);
     private Handler handler = new Handler(Looper.getMainLooper());
-    private Map<RestauranteAdapter.OnLoadImage, URL> loadMap = new HashMap<>();
+    private Map<OnLoadImage, URL> loadMap = new HashMap<>();
     private Map<URL, Bitmap> bitmaps = new HashMap<>();
     private Set<URL> loading = new HashSet<>();
 
     private ImageLoader() {
     }
 
-    public void loadImage(final String urlString, final RestauranteAdapter.OnLoadImage resolveLoader) {
+    public void loadImage(final String urlString, final OnLoadImage resolveLoader) {
         try {
             loadImage(new URL(urlString), resolveLoader);
         } catch (MalformedURLException e) {
@@ -40,7 +39,7 @@ public class ImageLoader {
         }
     }
 
-    public void loadImage(final URL url, final RestauranteAdapter.OnLoadImage resolveLoader) {
+    public void loadImage(final URL url, final OnLoadImage resolveLoader) {
         loadMap.put(resolveLoader, url);
         executor.execute(new Runnable() {
             @Override
@@ -64,11 +63,11 @@ public class ImageLoader {
                         // Está cargando, se resuelve en otro thread
                         return;
                     }
-                    final Set<Map.Entry<RestauranteAdapter.OnLoadImage, URL>> entrySet = new HashSet<>(loadMap.entrySet());
+                    final Set<Map.Entry<OnLoadImage, URL>> entrySet = new HashSet<>(loadMap.entrySet());
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            for (Map.Entry<RestauranteAdapter.OnLoadImage, URL> entry : entrySet) {
+                            for (Map.Entry<OnLoadImage, URL> entry : entrySet) {
                                 if (url.equals(entry.getValue())) {
                                     entry.getKey().onSuccesLoad(bitmap);
                                     loadMap.remove(entry.getKey());

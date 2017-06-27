@@ -14,6 +14,7 @@ public class Restaurante implements Serializable{
     private Double longitute;
     private String horaApertura;
     private String horaCierre;
+    private String tipoComida;
 
     public String getUrl() {
         return url;
@@ -80,5 +81,13 @@ public class Restaurante implements Serializable{
 
     public void setHoraCierre(String horaCierre) {
         this.horaCierre = horaCierre;
+    }
+
+	public String getTipoComida(){
+        return tipoComida;
+    }
+
+	public void setTipoComida(String tipoComida) {
+        this.tipoComida = tipoComida;
     }
 }

@@ -1,9 +1,7 @@
 package ar.com.utn.restogo.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.location.Location;
-import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.RecyclerView;
@@ -76,11 +74,11 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView nameView;
-        TextView distanceView;
-        ConstraintLayout imagePanel;
-        ProgressBar imageprogressBar;
-        ImageView imageView;
+        private TextView nameView;
+        private TextView distanceView;
+        private ConstraintLayout imagePanel;
+        private ProgressBar imageprogressBar;
+        private ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -116,28 +114,6 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
             restaurantes.remove(restaurante);
             keys.remove(key);
             notifyDataSetChanged();
-        }
-    }
-
-    public class OnLoadImage {
-        ConstraintLayout imagePanel;
-        ProgressBar imageprogressBar;
-        ImageView imageView;
-
-        private OnLoadImage(ConstraintLayout imagePanel, ProgressBar imageprogressBar, ImageView imageView) {
-            this.imagePanel = imagePanel;
-            this.imageprogressBar = imageprogressBar;
-            this.imageView = imageView;
-        }
-
-        public void onSuccesLoad(Bitmap bitmap){
-            imageprogressBar.setVisibility(View.VISIBLE);
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setImageBitmap(bitmap);
-        }
-
-        public void onFailedLoad(){
-            imagePanel.setVisibility(View.GONE);
         }
     }
 

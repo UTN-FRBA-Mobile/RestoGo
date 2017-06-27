@@ -55,5 +55,10 @@
     <string name="nav_carga_datos">Cargar Datos</string>
     <string name="nav_carga_tipo_comida">Tipo Comida</string>
 
+    <!--Msjs-->
+    <string name="tipos_comida">Tipos de comida disponibles</string>
+    <string name="direccion">Ubicación</string>
+    <string name="horario">Horario</string>
+    <string name="btn_reserva">Reservar</string>
 
 </resources>

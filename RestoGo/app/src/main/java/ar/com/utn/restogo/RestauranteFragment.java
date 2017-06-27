@@ -1,35 +1,34 @@
 package ar.com.utn.restogo;
 
-import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-
-import ar.com.utn.restogo.adapter.RestauranteAdapter;
+import ar.com.utn.restogo.adapter.OnLoadImage;
 import ar.com.utn.restogo.modelo.Restaurante;
+import ar.com.utn.restogo.storage.ImageLoader;
 
 public class RestauranteFragment extends Fragment {
     public static final String RESTAURANTE_KEY = "RESTAURANTE_KEY";
     private Restaurante restaurante;
+    private TextView tipoComidaText;
+    private TextView ubicacionText;
+    private TextView horarioText;
+    private Button btnReservar;
+    private ConstraintLayout imagePanel;
+    private ProgressBar imageprogressBar;
+    private ImageView imageView;
 
     public static RestauranteFragment newInstance(Restaurante restaurante) {
         RestauranteFragment f = new RestauranteFragment();
-        // Supply index input as an argument.
         Bundle args = new Bundle();
         args.putSerializable(RESTAURANTE_KEY, restaurante);
         f.setArguments(args);
@@ -47,5 +46,29 @@ public class RestauranteFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        tipoComidaText = (TextView) view.findViewById(R.id.typeFoodText);
+        ubicacionText = (TextView) view.findViewById(R.id.locationText);
+        horarioText = (TextView) view.findViewById(R.id.openTimeText);
+        btnReservar = (Button) view.findViewById(R.id.btnReservar);
+        imagePanel = (ConstraintLayout) view.findViewById(R.id.imagePanel);
+        imageprogressBar = (ProgressBar) view.findViewById(R.id.progressImage);
+        imageView = (ImageView) view.findViewById(R.id.imageView);
+
+        if (restaurante.getUrl() != null){
+            imagePanel.setVisibility(View.VISIBLE);
+            ImageLoader.instance.loadImage(restaurante.getUrl(), new OnLoadImage(imagePanel,imageprogressBar, imageView));
+        }
+
+        if (restaurante.getUbicacion() != null){
+            ubicacionText.setText(restaurante.getUbicacion());
+        }
+
+        if (restaurante.getHorario() != null){
+            horarioText.setText(restaurante.getHorario());
+        }
+
+        if (restaurante.getTipoComida() != null){
+            tipoComidaText.setText(restaurante.getTipoComida());
+        }
     }
 }
