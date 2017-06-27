@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import ar.com.utn.restogo.adapter.RestauranteAdapter;
 import ar.com.utn.restogo.conexion.Utils;
+import ar.com.utn.restogo.modelo.FacadeMain;
 import ar.com.utn.restogo.modelo.Restaurante;
 
 public class RestaurantesFragment extends Fragment {
@@ -54,7 +55,7 @@ public class RestaurantesFragment extends Fragment {
 
         mLoadingView = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mAdapter = new RestauranteAdapter(getContext(), getActivity().getSupportFragmentManager());
+        mAdapter = new RestauranteAdapter(getContext(), getActivity().getSupportFragmentManager(), ((FacadeMain)getActivity()));
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {

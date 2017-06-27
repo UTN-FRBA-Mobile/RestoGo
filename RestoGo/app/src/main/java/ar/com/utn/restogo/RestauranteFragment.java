@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -12,17 +13,24 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
 import ar.com.utn.restogo.adapter.OnLoadImage;
 import ar.com.utn.restogo.modelo.Restaurante;
 import ar.com.utn.restogo.storage.ImageLoader;
 
 public class RestauranteFragment extends Fragment {
     public static final String RESTAURANTE_KEY = "RESTAURANTE_KEY";
+
+    private FirebaseAuth auth;
+
     private Restaurante restaurante;
     private TextView tipoComidaText;
     private TextView ubicacionText;
     private TextView horarioText;
     private Button btnReservar;
+    private Button btnLogin;
     private ConstraintLayout imagePanel;
     private ProgressBar imageprogressBar;
     private ImageView imageView;
@@ -40,6 +48,7 @@ public class RestauranteFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View output = inflater.inflate(R.layout.fragment_restaurante, container, false);
         this.restaurante = (Restaurante) getArguments().getSerializable(RESTAURANTE_KEY);
+        auth = FirebaseAuth.getInstance();
         return output;
     }
 
@@ -50,6 +59,7 @@ public class RestauranteFragment extends Fragment {
         ubicacionText = (TextView) view.findViewById(R.id.locationText);
         horarioText = (TextView) view.findViewById(R.id.openTimeText);
         btnReservar = (Button) view.findViewById(R.id.btnReservar);
+        btnLogin = (Button) view.findViewById(R.id.btnLoguearse);
         imagePanel = (ConstraintLayout) view.findViewById(R.id.imagePanel);
         imageprogressBar = (ProgressBar) view.findViewById(R.id.progressImage);
         imageView = (ImageView) view.findViewById(R.id.imageView);
@@ -69,6 +79,22 @@ public class RestauranteFragment extends Fragment {
 
         if (restaurante.getTipoComida() != null){
             tipoComidaText.setText(restaurante.getTipoComida());
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        refresh(auth.getCurrentUser());
+    }
+
+    private void refresh(FirebaseUser user) {
+        if (user != null) {
+            btnReservar.setVisibility(View.VISIBLE);
+            btnLogin.setVisibility(View.GONE);
+        } else {
+            btnReservar.setVisibility(View.GONE);
+            btnLogin.setVisibility(View.VISIBLE);
         }
     }
 }

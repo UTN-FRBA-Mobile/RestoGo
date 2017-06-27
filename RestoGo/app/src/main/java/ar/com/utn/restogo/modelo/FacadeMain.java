@@ -6,4 +6,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 public interface FacadeMain {
     public GoogleApiClient getClient();
+
+    public void showUpButton(boolean show);
 }

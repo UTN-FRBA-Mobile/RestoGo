@@ -230,7 +230,8 @@ public class MainActivity extends AppCompatActivity
         showUpButton(getSupportFragmentManager().getBackStackEntryCount() > 0);
     }
 
-    private void showUpButton(boolean show) {
+    @Override
+    public void showUpButton(boolean show) {
         if(show) {
             mDrawerToggle.setDrawerIndicatorEnabled(false);
             mActionBar.setDisplayHomeAsUpEnabled(true);
