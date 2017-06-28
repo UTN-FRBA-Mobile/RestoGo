@@ -65,7 +65,7 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
                 RestauranteFragment restauranteFragment = RestauranteFragment.newInstance(unRestante);
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, restauranteFragment, "RestauranteFragment")
-                        .addToBackStack("restaurante")
+                        .addToBackStack("RestauranteFragment")
                         .commit();
             }
         });

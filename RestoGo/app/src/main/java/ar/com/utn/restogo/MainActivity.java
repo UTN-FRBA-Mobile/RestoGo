@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity
         } else {
             int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
             if (backStackCount >= 1) {
-                getSupportFragmentManager().popBackStack();
+                getSupportFragmentManager().popBackStackImmediate();
                 // Change to hamburger icon if at bottom of stack
                 if(backStackCount == 1){
                     showUpButton(false);
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, mapFragment)
-                    .addToBackStack("mapa")
+                    .addToBackStack("MapFragment")
                     .commit();
             showUpButton(true);
         }
@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container,new PublicarFragment())
-                        .addToBackStack("publicar")
+                        .addToBackStack("PublicarFragment")
                         .commit();
                 showUpButton(true);
             }
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container,new LoginFragment())
-                    .addToBackStack("login")
+                    .addToBackStack("LoginFragment")
                     .commit();
             showUpButton(true);
         } else if (id == R.id.nav_cerrar_sesion) {

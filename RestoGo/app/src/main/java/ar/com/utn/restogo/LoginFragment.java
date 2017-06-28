@@ -139,7 +139,7 @@ public class LoginFragment extends Fragment {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container, registroFragmenent, "RegistroFragment")
-                .addToBackStack("registro")
+                .addToBackStack("RegistroFragment")
                 .commit();
     }
 
@@ -181,8 +181,7 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginOk() {
-        startActivity(new Intent(getContext(), MainActivity.class));
-        getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getActivity().getSupportFragmentManager().popBackStack("LoginFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     private void errorLogin() {

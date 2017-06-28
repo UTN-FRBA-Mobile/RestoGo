@@ -212,7 +212,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         RestauranteFragment restauranteFragment = RestauranteFragment.newInstance(restMarkers.get(marker));
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, restauranteFragment, "RestauranteFragment")
-                .addToBackStack("restaurante")
+                .addToBackStack("RestauranteFragment")
                 .commit();
     }
 

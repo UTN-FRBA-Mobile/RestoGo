@@ -110,7 +110,7 @@ public class RegistroFragment extends Fragment implements TaskListener {
                             String token = FirebaseInstanceId.getInstance().getToken();
                             new TaskRequestUrl(RegistroFragment.this).execute(ConstructorUrls.armarURL("Clientes"), ConstructorUrls.getJSONUsuario(email, token), "POST");
 
-                            getActivity().getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                            getActivity().getSupportFragmentManager().popBackStack("LoginFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         } else {
                             Toast.makeText(getContext(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }

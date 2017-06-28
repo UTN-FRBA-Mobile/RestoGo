@@ -80,6 +80,30 @@ public class RestauranteFragment extends Fragment {
         if (restaurante.getTipoComida() != null){
             tipoComidaText.setText(restaurante.getTipoComida());
         }
+
+        btnReservar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ReservarFragment reservarFragmenent = ReservarFragment.newInstance(restaurante);
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, reservarFragmenent, "ReservarFragment")
+                        .addToBackStack("ReservarFragment")
+                        .commit();
+            }
+        });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LoginFragment loginFragmenent = new LoginFragment();
+                getActivity().getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container, loginFragmenent, "LoginFragment")
+                        .addToBackStack("LoginFragment")
+                        .commit();
+            }
+        });
     }
 
     @Override

@@ -61,5 +61,10 @@
     <string name="direccion">Ubicación</string>
     <string name="horario">Horario</string>
     <string name="btn_reserva">Reservar</string>
+    <string name="btn_confirma_reserva">Confirmar</string>
+    <string name="lbl_dia">Dia:</string>
+    <string name="lbl_hora">Hora:</string>
+    <string name="lbl_cantidad_personas">Cantidad de personas:</string>
+
 
 </resources>
