@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +17,14 @@ import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
+import ar.com.utn.restogo.modelo.Reserva;
 import ar.com.utn.restogo.modelo.Restaurante;
 import butterknife.BindView;
 
@@ -69,7 +73,7 @@ public class ReservarFragment extends Fragment {
         butttonConfirmar = (Button) getView().findViewById(R.id.btnConfirmarReserva);
 
         auth = FirebaseAuth.getInstance();
-        cantidad = 0;
+        cantidad = 1;
         textCantidad.setText(cantidad.toString());
 
         buttonDia.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +95,7 @@ public class ReservarFragment extends Fragment {
         buttonMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (cantidad>0) {
+                if (cantidad>1) {
                     cantidad--;
                 }
                 textCantidad.setText(cantidad.toString());
@@ -109,7 +113,24 @@ public class ReservarFragment extends Fragment {
         butttonConfirmar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if ("".contentEquals(textDia.getText().toString())){
+                    Toast.makeText(getActivity(), getString(R.string.error_falta_fecha), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if ("".contentEquals(textHora.getText().toString())){
+                    Toast.makeText(getActivity(), getString(R.string.error_falta_hora), Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
+                final FirebaseDatabase database = FirebaseDatabase.getInstance();
+                Reserva reserva = new Reserva();
+                reserva.setCantidadPersonas(textCantidad.getText().toString());
+                reserva.setDia(textDia.getText().toString());
+                reserva.setHora(textHora.getText().toString());
+                reserva.setUssid(auth.getCurrentUser().getUid());
+
+                database.getReference("reservas/"+restaurante.getKey()).push().setValue(reserva);
+                getActivity().getSupportFragmentManager().popBackStack("RestauranteFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
     }

@@ -16,6 +16,9 @@ public class Restaurante implements Serializable{
     private String horaCierre;
     private String tipoComida;
 
+    @Exclude
+    private String key;
+
     public String getUrl() {
         return url;
     }
@@ -94,5 +97,15 @@ public class Restaurante implements Serializable{
 
 	public void setTipoComida(String tipoComida) {
         this.tipoComida = tipoComida;
+    }
+
+    @Exclude
+    public String getKey() {
+        return key;
+    }
+
+    @Exclude
+    public void setKey(String key) {
+        this.key = key;
     }
 }

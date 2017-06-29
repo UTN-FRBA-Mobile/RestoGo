@@ -66,5 +66,7 @@
     <string name="lbl_hora">Hora:</string>
     <string name="lbl_cantidad_personas">Cantidad de personas:</string>
 
+    <string name="error_falta_fecha">Debe ingresar una fecha</string>
+    <string name="error_falta_hora">Debe ingresar una hora</string>
 
 </resources>

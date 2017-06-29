@@ -75,6 +75,7 @@ public class RestaurantesFragment extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Restaurante restaurante = dataSnapshot.getValue(Restaurante.class);
                 String restauranteKey = dataSnapshot.getKey();
+                restaurante.setKey(restauranteKey);
                 mAdapter.add(restauranteKey, restaurante);
             }
 
@@ -82,6 +83,7 @@ public class RestaurantesFragment extends Fragment {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Restaurante restaurante = dataSnapshot.getValue(Restaurante.class);
                 String restauranteKey = dataSnapshot.getKey();
+                restaurante.setKey(restauranteKey);
                 mAdapter.update(restauranteKey, restaurante);
             }
 
