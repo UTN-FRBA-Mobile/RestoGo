@@ -108,7 +108,7 @@ public class RegistroFragment extends Fragment implements TaskListener {
                         if (task.isSuccessful()) {
                             //Se manda el email y el token asociado al dispositivo al server
                             String token = FirebaseInstanceId.getInstance().getToken();
-                            new TaskRequestUrl(RegistroFragment.this).execute(ConstructorUrls.armarURL("Clientes"), ConstructorUrls.getJSONUsuario(email, token), "POST");
+                            new TaskRequestUrl(RegistroFragment.this).execute(ConstructorUrls.armarURL("Clientes"), ConstructorUrls.getJSONUsuario(auth.getCurrentUser().getUid(), token), "POST");
 
                             getActivity().getSupportFragmentManager().popBackStack("LoginFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
                         } else {
