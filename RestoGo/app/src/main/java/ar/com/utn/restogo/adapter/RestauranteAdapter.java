@@ -26,10 +26,8 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
     private LayoutInflater layoutInflater;
     private ArrayList<String> keys = new ArrayList<String>();
     private ArrayList<Restaurante> restaurantes = new ArrayList<Restaurante>();
-    private FacadeMain callback;
 
-    public RestauranteAdapter(Context context, FragmentManager fragmentManager, FacadeMain callback) {
-        this.callback = callback;
+    public RestauranteAdapter(Context context, FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
         this.layoutInflater = LayoutInflater.from(context);
     }
@@ -61,7 +59,6 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                callback.showUpButton(true);
                 RestauranteFragment restauranteFragment = RestauranteFragment.newInstance(unRestante);
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, restauranteFragment, "RestauranteFragment")

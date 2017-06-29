@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -65,9 +66,24 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(savedInstanceState != null){
-            resolveUpButtonWithFragmentStack();
-        } else {
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener()
+        {
+            public void onBackStackChanged()
+            {
+                if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+                    mDrawer.closeDrawer(GravityCompat.START);
+                } else {
+                    int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+                    if(backStackCount > 0){
+                        showUpButton(true);
+                    } else {
+                        showUpButton(false);
+                    }
+                }
+            }
+        });
+
+        if(savedInstanceState == null){
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fragment_container, new RestaurantesFragment(), "RestaurantesFragment")
@@ -148,10 +164,6 @@ public class MainActivity extends AppCompatActivity
             int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
             if (backStackCount >= 1) {
                 getSupportFragmentManager().popBackStackImmediate();
-                // Change to hamburger icon if at bottom of stack
-                if(backStackCount == 1){
-                    showUpButton(false);
-                }
             } else {
                 super.onBackPressed();
             }
@@ -176,7 +188,6 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container, mapFragment)
                     .addToBackStack("MapFragment")
                     .commit();
-            showUpButton(true);
         }
         else if (id == R.id.nav_publicar){
             if (auth.getCurrentUser() == null) {
@@ -187,7 +198,6 @@ public class MainActivity extends AppCompatActivity
                         .replace(R.id.fragment_container,new PublicarFragment())
                         .addToBackStack("PublicarFragment")
                         .commit();
-                showUpButton(true);
             }
         } else if (id == R.id.nav_iniciar_sesion) {
             getSupportFragmentManager()
@@ -195,7 +205,6 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container,new LoginFragment())
                     .addToBackStack("LoginFragment")
                     .commit();
-            showUpButton(true);
         } else if (id == R.id.nav_cerrar_sesion) {
             auth.signOut();
             actualizarDatosUsuario(auth.getCurrentUser());
@@ -226,12 +235,7 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void resolveUpButtonWithFragmentStack() {
-        showUpButton(getSupportFragmentManager().getBackStackEntryCount() > 0);
-    }
-
-    @Override
-    public void showUpButton(boolean show) {
+    private void showUpButton(boolean show) {
         if(show) {
             mDrawerToggle.setDrawerIndicatorEnabled(false);
             mActionBar.setDisplayHomeAsUpEnabled(true);

@@ -55,7 +55,7 @@ public class RestaurantesFragment extends Fragment {
 
         mLoadingView = (RelativeLayout) view.findViewById(R.id.loadingPanel);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mAdapter = new RestauranteAdapter(getContext(), getActivity().getSupportFragmentManager(), ((FacadeMain)getActivity()));
+        mAdapter = new RestauranteAdapter(getContext(), getActivity().getSupportFragmentManager());
         mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
