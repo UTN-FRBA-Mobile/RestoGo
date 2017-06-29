@@ -6,6 +6,9 @@ import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 public class ConstructorUrls {
 
     private static final String PROTOCOLO = "http";
@@ -35,6 +38,18 @@ public class ConstructorUrls {
         return json.toString();
     }
 
-    //TODO agregar creacion de JSON para pedido
+    public static String armarUrlGetToken(String path, String emailUsuario){
+        Uri.Builder builder = new Uri.Builder();
+
+            builder.scheme(PROTOCOLO)
+                    .encodedAuthority(urlBase)
+                    .appendPath(path)
+                    .appendPath(emailUsuario);
+
+        String url = builder.build().toString();
+        Log.d("ConstructorUrls", url);
+
+        return url;
+    }
 
 }

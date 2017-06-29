@@ -18,15 +18,19 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import ar.com.utn.restogo.RegistroFragment;
 
 public class Utils {
 
@@ -59,9 +63,13 @@ public class Utils {
         HttpURLConnection conexionUrl = null;
 
         try {
-            url = new URL(direccUrl);
+            url = new URL(URLDecoder.decode(direccUrl, "UTF-8"));
         } catch (MalformedURLException e) {
             Log.e(LOG_TAG, "Error al formar la URL " + direccUrl, e);
+            e.printStackTrace();
+            return null;
+        }
+        catch(UnsupportedEncodingException e){
             e.printStackTrace();
             return null;
         }
@@ -69,16 +77,21 @@ public class Utils {
         try {
             conexionUrl = (HttpURLConnection)url.openConnection();
             conexionUrl.setRequestMethod(metodo);
-            conexionUrl.setRequestProperty("Content-Type", "application/json");
-            conexionUrl.setRequestProperty("Content-length", Integer.toString(jsonString.length()));
-            conexionUrl.setRequestProperty("charset", "utf-8");
-            conexionUrl.setUseCaches(false);
-            conexionUrl.setDoOutput(true);
 
-            DataOutputStream dos = new DataOutputStream(conexionUrl.getOutputStream());
-            dos.writeBytes(jsonString);
-            dos.flush();
-            dos.close();
+            if(metodo.equals("POST")){
+                conexionUrl.setRequestProperty("Content-Type", "application/json");
+                conexionUrl.setRequestProperty("Content-length", Integer.toString(jsonString.length()));
+                conexionUrl.setRequestProperty("charset", "utf-8");
+                conexionUrl.setDoOutput(true);
+                conexionUrl.setUseCaches(false);
+                DataOutputStream dos = new DataOutputStream(conexionUrl.getOutputStream());
+                dos.writeBytes(jsonString);
+                dos.flush();
+                dos.close();
+            }
+            else{
+                conexionUrl.connect();
+            }
 
             InputStream inputStream = conexionUrl.getInputStream();
             respuesta = parsearAString(inputStream);
@@ -143,23 +156,6 @@ public class Utils {
         }
 
         return null;
-    }
-
-    public static Timestamp timestampServer(Date date){
-        return Timestamp.valueOf(dateFormatServer.format(date));
-    }
-
-    //Se va a usar cuando el Cliente haga un pedido y ademas cuando el Resurante le de el OK por el mismo
-    public static void sendNotificationToUser(Map<String, String> message, String titulo) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference notifications = ref.child("notificationRequests");
-
-        Map notification = new HashMap<>();
-        notification.put("username", FirebaseInstanceId.getInstance().getToken());
-        notification.put("message", message);
-        notification.put("titulo",titulo);
-
-        notifications.push().setValue(notification);
     }
 
 }

@@ -26,7 +26,7 @@ public class TaskRequestUrl extends AsyncTask<String, Void, JSONObject> {
 
         String respuesta = Utils.requestUrl(url, jsonString, metodo);
         if(respuesta != null){
-            return Utils.parsearAJson(respuesta);
+            return Utils.parsearAJson(respuesta.replaceAll("\\[", "").replaceAll("\\]", ""));
         }
         return null;
     }
