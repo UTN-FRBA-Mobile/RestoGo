@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -77,8 +76,12 @@ public class RestauranteFragment extends Fragment {
             horarioText.setText(restaurante.getHorario());
         }
 
-        if (restaurante.getTipoComida() != null){
-            tipoComidaText.setText(restaurante.getTipoComida());
+        if (restaurante.getComidas() != null){
+            String stringTipos = "";
+            for (String comida : restaurante.getComidas()) {
+                stringTipos = stringTipos + " ," + comida;
+            }
+            tipoComidaText.setText(stringTipos);
         }
 
         btnReservar.setOnClickListener(new View.OnClickListener() {

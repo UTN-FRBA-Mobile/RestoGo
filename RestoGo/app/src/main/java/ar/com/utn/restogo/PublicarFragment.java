@@ -86,6 +86,7 @@ public class PublicarFragment extends Fragment {
 
     private String currentPhotoPath;
     private Place place;
+    private List<String> comidas = new ArrayList<>();
 
     public PublicarFragment() {
         // Required empty public constructor
@@ -150,6 +151,7 @@ public class PublicarFragment extends Fragment {
                         String stringTipos = "";
                         for (TipoComida tipo : seleccs) {
                             stringTipos = stringTipos + " ," + tipo.toString();
+                            comidas.add(tipo.toString());
                         }
                         txtTiposComida.setText(stringTipos);
                     }
@@ -277,6 +279,11 @@ public class PublicarFragment extends Fragment {
             campoConError = txtHoraApertura;
             cancelar = true;
         }
+        if (comidas.isEmpty()) {
+            txtTiposComida.setError(getString(R.string.error_campo_requerido));
+            campoConError = txtTiposComida;
+            cancelar = true;
+        }
         if (TextUtils.isEmpty(direccion)) {
             txtDireccion.setError(getString(R.string.error_campo_requerido));
             campoConError = txtDireccion;
@@ -302,7 +309,8 @@ public class PublicarFragment extends Fragment {
         restaurante.setLongitute(place.getLatLng().longitude);
         restaurante.setHoraApertura(horaApertura);
         restaurante.setHoraCierre(horaCierre);
-        // TODO dias, tipos de comida
+        restaurante.setComidas(comidas);
+        //TODO dias
 
         if (currentPhotoPath != null) {
             // Si se cargo una imagen la sube y, si se subio bien, publica el restaurante

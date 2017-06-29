@@ -16,8 +16,8 @@ import java.util.ArrayList;
 
 import ar.com.utn.restogo.R;
 import ar.com.utn.restogo.RestauranteFragment;
-import ar.com.utn.restogo.modelo.FacadeMain;
 import ar.com.utn.restogo.modelo.Restaurante;
+import ar.com.utn.restogo.modelo.TipoComida;
 import ar.com.utn.restogo.storage.DistanceLoader;
 import ar.com.utn.restogo.storage.ImageLoader;
 
@@ -26,6 +26,9 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
     private LayoutInflater layoutInflater;
     private ArrayList<String> keys = new ArrayList<String>();
     private ArrayList<Restaurante> restaurantes = new ArrayList<Restaurante>();
+
+    private ArrayList<Restaurante> restaurantesAMostrar = new ArrayList<>();
+    private ArrayList<TipoComida> tiposDeComidaMostrar = new ArrayList<>();
 
     public RestauranteAdapter(Context context, FragmentManager fragmentManager) {
         this.fragmentManager = fragmentManager;
@@ -45,15 +48,21 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        final Restaurante unRestante = restaurantes.get(position);
+        final Restaurante unRestante = restaurantesAMostrar.get(position);
 
         holder.nameView.setText(unRestante.getDescripcion());
         if (unRestante.getUrl() != null){
             holder.imagePanel.setVisibility(View.VISIBLE);
             ImageLoader.instance.loadImage(unRestante.getUrl(), new OnLoadImage(holder.imagePanel,holder.imageprogressBar, holder.imageView));
+        } else {
+            // Sin esto habia un bug raro al filtrar (la img se duplicaba en otros restaurantes)
+            holder.imagePanel.setVisibility(View.GONE);
         }
         if (unRestante.getLocation() != null){
             DistanceLoader.instance.loadDistance(new OnNewDistance(unRestante.getLocation(), holder.distanceView));
+        } else {
+            // Sin esto habia un bug raro al filtrar (la dist se duplicaba en otros restaurantes)
+            holder.distanceView.setVisibility(View.GONE);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -70,7 +79,7 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
 
     @Override
     public int getItemCount() {
-        return restaurantes.size();
+        return restaurantesAMostrar.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -96,6 +105,7 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
             keys.add(key);
             Integer position = keys.indexOf(key);
             restaurantes.add(restaurante);
+            agregarRestaurante(restaurante);
             notifyDataSetChanged();
         }
     }
@@ -104,6 +114,7 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
         if (keys.contains(key)) {
             Integer position = keys.indexOf(key);
             restaurantes.set(position, restaurante);
+            actualizarRestaurante(restaurante);
             notifyDataSetChanged();
         }
     }
@@ -113,9 +124,58 @@ public class RestauranteAdapter extends RecyclerView.Adapter<RestauranteAdapter.
             Integer position = keys.indexOf(key);
             Restaurante restaurante = restaurantes.get(position);
             restaurantes.remove(restaurante);
+            restaurantesAMostrar.remove(restaurante);
             keys.remove(key);
             notifyDataSetChanged();
         }
+    }
+
+    /**
+     * Agrega el restaurante a la lista de los que se muestran solo si cumple con el filtro
+     * @param restaurante
+     */
+    private void agregarRestaurante(Restaurante restaurante) {
+        // Si el filtro esta vacio, lo agrega directamente
+        if (tiposDeComidaMostrar.isEmpty()) {
+            restaurantesAMostrar.add(restaurante);
+        } else {
+            if (restaurante.getComidas() != null) {
+                for (TipoComida tipo : tiposDeComidaMostrar) {
+                    if (restaurante.getComidas().contains(tipo.toString())) {
+                        restaurantesAMostrar.add(restaurante);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Busca en la lista de los restaurantes que se muestran uno con la misma descripcion,
+     * si encuentra, lo actualiza.
+     * @param restaurante
+     */
+    private void actualizarRestaurante(Restaurante restaurante) {
+        for (Restaurante rest : restaurantesAMostrar) {
+            if (rest.getDescripcion().equals(restaurante.getDescripcion())) {
+                rest = restaurante;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Setea el filtro con los tipos de comida, y carga en la lista los restaurantes
+     * que correspondan
+     * @param tipos
+     */
+    public void setTiposDeComidaFiltro(ArrayList<TipoComida> tipos) {
+        this.tiposDeComidaMostrar = tipos;
+        restaurantesAMostrar.clear();
+        for (Restaurante restaurante : restaurantes) {
+            agregarRestaurante(restaurante);
+        }
+        notifyDataSetChanged();
     }
 
     public class OnNewDistance {

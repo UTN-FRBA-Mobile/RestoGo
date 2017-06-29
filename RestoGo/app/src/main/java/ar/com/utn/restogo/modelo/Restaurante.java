@@ -5,6 +5,7 @@ import android.location.Location;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Restaurante implements Serializable{
     private String descripcion;
@@ -14,7 +15,7 @@ public class Restaurante implements Serializable{
     private Double longitute;
     private String horaApertura;
     private String horaCierre;
-    private String tipoComida;
+    private List<String> comidas;
 
     @Exclude
     private String key;
@@ -91,12 +92,12 @@ public class Restaurante implements Serializable{
         this.horaCierre = horaCierre;
     }
 
-	public String getTipoComida(){
-        return tipoComida;
+    public List<String> getComidas() {
+        return comidas;
     }
 
-	public void setTipoComida(String tipoComida) {
-        this.tipoComida = tipoComida;
+    public void setComidas(List<String> comidas) {
+        this.comidas = comidas;
     }
 
     @Exclude

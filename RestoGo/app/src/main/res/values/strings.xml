@@ -12,6 +12,9 @@
     <string name="nav_cerrar_sesion">Cerrar sesión</string>
     <string name="nav_nombre_usuario">Sesión no iniciada</string>
 
+    <!--Lista restaurantes-->
+    <string name="botonFiltroComidas">Buscar por tipo de comida</string>
+
     <!--Publicar-->
     <string name="hint_nombre_restaurant">Nombre</string>
     <string name="hint_direcc_restaurant">Dirección</string>
