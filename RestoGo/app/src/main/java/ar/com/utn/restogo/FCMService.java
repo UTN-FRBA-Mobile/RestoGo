@@ -26,8 +26,7 @@ public class FCMService extends FirebaseMessagingService {
     }
 
     private void createNotification( String messageBody, String title, String info) {
-        Intent intent = new Intent(this, InformacionPedidoActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra("message", info);
         PendingIntent resultIntent = PendingIntent.getActivity(this , 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -37,7 +36,7 @@ public class FCMService extends FirebaseMessagingService {
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle(title)
                 .setContentText(messageBody)
-                .setAutoCancel( true )
+                .setAutoCancel(true)
                 .setSound(notificationSoundURI)
                 .setContentIntent(resultIntent);
 
