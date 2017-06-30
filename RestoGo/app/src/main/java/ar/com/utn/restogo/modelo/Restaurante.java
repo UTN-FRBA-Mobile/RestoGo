@@ -15,6 +15,7 @@ public class Restaurante implements Serializable{
     private Double longitute;
     private String horaApertura;
     private String horaCierre;
+    private String usuarioRestaurante;
     private List<String> comidas;
 
     @Exclude
@@ -98,6 +99,14 @@ public class Restaurante implements Serializable{
 
     public void setComidas(List<String> comidas) {
         this.comidas = comidas;
+    }
+
+    public void setUsuarioRestaurante(String usuarioRestaurante) {
+        this.usuarioRestaurante = usuarioRestaurante;
+    }
+
+    public String getUsuarioRestaurante() {
+        return usuarioRestaurante;
     }
 
     @Exclude

@@ -37,6 +37,7 @@ import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -301,6 +302,7 @@ public class PublicarFragment extends Fragment {
         }
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
 
         final Restaurante restaurante = new Restaurante();
         restaurante.setDescripcion(descripcion);
@@ -310,6 +312,7 @@ public class PublicarFragment extends Fragment {
         restaurante.setHoraApertura(horaApertura);
         restaurante.setHoraCierre(horaCierre);
         restaurante.setComidas(comidas);
+        restaurante.setUsuarioRestaurante(auth.getCurrentUser().getUid());
         //TODO dias
 
         if (currentPhotoPath != null) {

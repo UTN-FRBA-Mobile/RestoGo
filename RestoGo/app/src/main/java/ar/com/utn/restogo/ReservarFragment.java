@@ -22,8 +22,14 @@ import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
+import ar.com.utn.restogo.conexion.EnvioNotificacion;
 import ar.com.utn.restogo.modelo.Reserva;
 import ar.com.utn.restogo.modelo.Restaurante;
 import butterknife.BindView;
@@ -130,6 +136,7 @@ public class ReservarFragment extends Fragment {
                 reserva.setUssid(auth.getCurrentUser().getUid());
 
                 database.getReference("reservas/"+restaurante.getKey()).push().setValue(reserva);
+                enviarNotificacionReserva(reserva, restaurante);
                 getActivity().getSupportFragmentManager().popBackStack("RestauranteFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
@@ -177,6 +184,25 @@ public class ReservarFragment extends Fragment {
         public void onDateSet(DatePicker view, int year, int month, int day) {
             textDia.setText(new StringBuilder().append(pad(day)).append("/").append(pad(month)).append("/").append(pad(year)));
         }
+    }
+
+    private void enviarNotificacionReserva(Reserva reserva, Restaurante restaurante){
+        JSONObject json = null;
+        try{
+            json = new JSONObject();
+            json.put("destino", reserva.getUssid());
+            json.put("origen", restaurante.getUsuarioRestaurante());
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        Map pedidoCompleto = new HashMap<>();
+        pedidoCompleto.put("data", json.toString());
+        pedidoCompleto.put("text","¡Tenés un pedido de reserva!.");
+
+        EnvioNotificacion envio = new EnvioNotificacion();
+        envio.sendNotificationToUser(pedidoCompleto, getString(R.string.app_name));
     }
 
     private static String pad(int c) {
