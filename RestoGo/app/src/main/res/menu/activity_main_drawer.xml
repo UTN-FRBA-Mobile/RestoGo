@@ -3,6 +3,7 @@
 
     <group android:checkableBehavior="single">
         <item
+            android:visible="false"
             android:id="@+id/nav_mapa"
             android:title="@string/nav_mapa" />
         <item

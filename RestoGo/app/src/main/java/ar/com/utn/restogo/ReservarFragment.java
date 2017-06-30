@@ -190,8 +190,8 @@ public class ReservarFragment extends Fragment {
         JSONObject json = null;
         try{
             json = new JSONObject();
-            json.put("destino", reserva.getUssid());
-            json.put("origen", restaurante.getUsuarioRestaurante());
+            json.put("destino", restaurante.getUsuarioRestaurante());
+            json.put("origen", reserva.getUssid());
         }
         catch(JSONException e){
             e.printStackTrace();
