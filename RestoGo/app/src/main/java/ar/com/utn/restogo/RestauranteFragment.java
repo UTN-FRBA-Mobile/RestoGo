@@ -27,6 +27,7 @@ public class RestauranteFragment extends Fragment {
     private Restaurante restaurante;
     private TextView tipoComidaText;
     private TextView ubicacionText;
+    private TextView diasText;
     private TextView horarioText;
     private Button btnReservar;
     private Button btnLogin;
@@ -56,6 +57,7 @@ public class RestauranteFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         tipoComidaText = (TextView) view.findViewById(R.id.typeFoodText);
         ubicacionText = (TextView) view.findViewById(R.id.locationText);
+        diasText = (TextView) view.findViewById(R.id.txtDias);
         horarioText = (TextView) view.findViewById(R.id.openTimeText);
         btnReservar = (Button) view.findViewById(R.id.btnReservar);
         btnLogin = (Button) view.findViewById(R.id.btnLoguearse);
@@ -76,13 +78,9 @@ public class RestauranteFragment extends Fragment {
             horarioText.setText(restaurante.getHorario());
         }
 
-        if (restaurante.getComidas() != null){
-            String stringTipos = "";
-            for (String comida : restaurante.getComidas()) {
-                stringTipos = stringTipos + " ," + comida;
-            }
-            tipoComidaText.setText(stringTipos);
-        }
+        tipoComidaText.setText(restaurante.getComidasText());
+
+        diasText.setText(restaurante.getDias());
 
         btnReservar.setOnClickListener(new View.OnClickListener() {
             @Override

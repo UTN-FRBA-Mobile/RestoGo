@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -83,6 +84,14 @@ public class PublicarFragment extends Fragment {
     @BindView(R.id.txtHoraCierre) TextView txtHoraCierre;
     @BindView(R.id.imageView) ImageView imageView;
     @BindView(R.id.btnCamara) Button btnCamara;
+    @BindView(R.id.chkLun) CheckBox chkLun;
+    @BindView(R.id.chkMar) CheckBox chkMar;
+    @BindView(R.id.chkMier) CheckBox chkMier;
+    @BindView(R.id.chkJuev) CheckBox chkJuev;
+    @BindView(R.id.chkVier) CheckBox chkVier;
+    @BindView(R.id.chkSab) CheckBox chkSab;
+    @BindView(R.id.chkDom) CheckBox chkDom;
+
     private Unbinder unbinder;
 
     private String currentPhotoPath;
@@ -154,7 +163,7 @@ public class PublicarFragment extends Fragment {
                             stringTipos = stringTipos + " ," + tipo.toString();
                             comidas.add(tipo.toString());
                         }
-                        txtTiposComida.setText(stringTipos);
+                        txtTiposComida.setText(stringTipos.substring(2, stringTipos.length()));
                     }
                 })
                 .setNegativeButton(getString(R.string.btn_cancelar), new DialogInterface.OnClickListener() {
@@ -313,7 +322,13 @@ public class PublicarFragment extends Fragment {
         restaurante.setHoraCierre(horaCierre);
         restaurante.setComidas(comidas);
         restaurante.setUsuarioRestaurante(auth.getCurrentUser().getUid());
-        //TODO dias
+        restaurante.setLunes(chkLun.isSelected());
+        restaurante.setMartes(chkMar.isSelected());
+        restaurante.setMiercoles(chkMier.isSelected());
+        restaurante.setJueves(chkJuev.isSelected());
+        restaurante.setViernes(chkVier.isSelected());
+        restaurante.setSabado(chkSab.isSelected());
+        restaurante.setDomingo(chkDom.isSelected());
 
         if (currentPhotoPath != null) {
             // Si se cargo una imagen la sube y, si se subio bien, publica el restaurante

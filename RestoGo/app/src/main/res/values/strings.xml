@@ -62,6 +62,7 @@
     <!--Msjs-->
     <string name="tipos_comida">Tipos de comida disponibles</string>
     <string name="direccion">Ubicación</string>
+    <string name="dias">Días</string>
     <string name="horario">Horario</string>
     <string name="btn_reserva">Reservar</string>
     <string name="btn_confirma_reserva">Confirmar</string>

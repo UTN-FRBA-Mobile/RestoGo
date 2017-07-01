@@ -25,10 +25,16 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 
+import org.json.JSONObject;
+
+import ar.com.utn.restogo.conexion.ConstructorUrls;
+import ar.com.utn.restogo.conexion.TaskListener;
+import ar.com.utn.restogo.conexion.TaskRequestUrl;
 import ar.com.utn.restogo.modelo.FacadeMain;
 
-public class LoginFragment extends Fragment {
+public class LoginFragment extends Fragment implements TaskListener{
 
     private static final String TAG = "LoginActivity";
     private static final int RC_SIGN_IN = 9001;
@@ -181,10 +187,24 @@ public class LoginFragment extends Fragment {
     }
 
     private void loginOk() {
+        //Se manda el email y el token asociado al dispositivo al server
+        String token = FirebaseInstanceId.getInstance().getToken();
+        new TaskRequestUrl(LoginFragment.this).execute(ConstructorUrls.armarURL("Clientes"), ConstructorUrls.getJSONUsuario(auth.getCurrentUser().getUid(), token), "POST");
+
         getActivity().getSupportFragmentManager().popBackStack("LoginFragment",FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     private void errorLogin() {
         Toast.makeText(getActivity(), getString(R.string.error_autenticacion), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void inicioRequest() {
+        //TODO
+    }
+
+    @Override
+    public void finRequest(JSONObject json) {
+        //TODO
     }
 }
