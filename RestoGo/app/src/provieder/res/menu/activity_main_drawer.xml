@@ -6,15 +6,12 @@
             android:id="@+id/nav_inicio"
             android:title="@string/nav_inicio"/>
         <item
-            android:id="@+id/nav_mapa"
-            android:title="@string/nav_mapa" />
+            android:id="@+id/nav_publicar"
+            android:title="@string/nav_publicar" />
     </group>
 
     <item android:title="@string/nav_cuenta">
         <menu>
-            <item
-                android:id="@+id/nav_iniciar_sesion"
-                android:title="@string/nav_iniciar_sesion"/>
             <item
                 android:id="@+id/nav_cerrar_sesion"
                 android:title="@string/nav_cerrar_sesion"/>

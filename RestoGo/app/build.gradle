@@ -21,9 +21,12 @@ android {
 
     productFlavors {
         cliente {
+            applicationIdSuffix ".cliente"
             versionNameSuffix "-cliente"
+
         }
         provieder {
+            applicationIdSuffix ".provieder"
             versionNameSuffix "-provieder"
         }
     }

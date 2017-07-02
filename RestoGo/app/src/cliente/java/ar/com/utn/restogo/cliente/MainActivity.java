@@ -1,4 +1,4 @@
-package ar.com.utn.restogo;
+package ar.com.utn.restogo.cliente;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -30,6 +30,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import ar.com.utn.restogo.LoginFragment;
+import ar.com.utn.restogo.MapFragment;
+import ar.com.utn.restogo.R;
+import ar.com.utn.restogo.RestaurantesFragment;
 import ar.com.utn.restogo.modelo.FacadeMain;
 import ar.com.utn.restogo.modelo.Restaurante;
 import ar.com.utn.restogo.storage.DistanceLoader;
@@ -70,16 +74,12 @@ public class MainActivity extends AppCompatActivity
         {
             public void onBackStackChanged()
             {
-                if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-                    mDrawer.closeDrawer(GravityCompat.START);
-                } else {
-                    int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
-                    if(backStackCount > 0){
-                        showUpButton(true);
-                    } else {
-                        showUpButton(false);
-                    }
-                }
+            int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
+            if(backStackCount > 0){
+                showUpButton(true);
+            } else {
+                showUpButton(false);
+            }
             }
         });
 
@@ -176,7 +176,9 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_mapa) {
+        if (id == R.id.nav_inicio) {
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else if (id == R.id.nav_mapa) {
             MapFragment mapFragment;
             if (mlocation != null) {
                 mapFragment = MapFragment.newInstance(mlocation.getLatitude(), mlocation.getLongitude());
@@ -188,17 +190,6 @@ public class MainActivity extends AppCompatActivity
                     .replace(R.id.fragment_container, mapFragment)
                     .addToBackStack("MapFragment")
                     .commit();
-        }
-        else if (id == R.id.nav_publicar){
-            if (auth.getCurrentUser() == null) {
-                Toast.makeText(this, getString(R.string.msj_inicie_sesion), Toast.LENGTH_SHORT).show();
-            } else {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container,new PublicarFragment())
-                        .addToBackStack("PublicarFragment")
-                        .commit();
-            }
         } else if (id == R.id.nav_iniciar_sesion) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -208,17 +199,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_cerrar_sesion) {
             auth.signOut();
             actualizarDatosUsuario(auth.getCurrentUser());
-        } else if (id == R.id.nav_carga_tipo_comida) {
-            /*Temporal para cargar un registro*/
-            FirebaseDatabase database = FirebaseDatabase.getInstance();
-            Restaurante restaurante = new Restaurante();
-            restaurante.setDescripcion("La Farola");
-
-            if (mlocation != null) {
-                restaurante.setLatitute(mlocation.getLatitude());
-                restaurante.setLongitute(mlocation.getLongitude());
-            }
-            database.getReference("restaurantes").push().setValue(restaurante);
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

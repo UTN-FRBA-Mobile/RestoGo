@@ -5,6 +5,7 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--Menu-->
+    <string name="nav_inicio">Inicio</string>
     <string name="nav_mapa">Mapa</string>
     <string name="nav_publicar">Publicar</string>
     <string name="nav_cuenta">Cuenta</string>
@@ -72,5 +73,4 @@
 
     <string name="error_falta_fecha">Debe ingresar una fecha</string>
     <string name="error_falta_hora">Debe ingresar una hora</string>
-
 </resources>

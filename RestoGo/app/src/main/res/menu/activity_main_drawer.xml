@@ -1,33 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:visible="false"
-            android:id="@+id/nav_mapa"
-            android:title="@string/nav_mapa" />
-        <item
-            android:id="@+id/nav_publicar"
-            android:title="@string/nav_publicar" />
-    </group>
-
-    <item android:title="@string/nav_cuenta">
-        <menu>
-            <item
-                android:id="@+id/nav_iniciar_sesion"
-                android:title="@string/nav_iniciar_sesion"/>
-            <item
-                android:id="@+id/nav_cerrar_sesion"
-                android:title="@string/nav_cerrar_sesion"/>
-        </menu>
-    </item>
-
-    <item android:title="@string/nav_carga_datos">
-        <menu>
-            <item
-                android:id="@+id/nav_carga_tipo_comida"
-                android:title="@string/nav_carga_tipo_comida"/>
-        </menu>
-    </item>
-
 </menu>

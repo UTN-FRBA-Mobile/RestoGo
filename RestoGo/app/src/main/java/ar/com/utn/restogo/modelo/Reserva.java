@@ -1,10 +1,14 @@
 package ar.com.utn.restogo.modelo;
 
-public class Reserva {
+import java.io.Serializable;
+
+public class Reserva implements Serializable {
     private String ussid;
     private String hora;
     private String dia;
     private String cantidadPersonas;
+    private Boolean fueRespondida;
+    private Boolean fueRechazada;
 
     public String getUssid() {
         return ussid;
@@ -36,5 +40,21 @@ public class Reserva {
 
     public void setCantidadPersonas(String cantidadPersonas) {
         this.cantidadPersonas = cantidadPersonas;
+    }
+
+    public Boolean getFueRespondida() {
+        return fueRespondida;
+    }
+
+    public void setFueRespondida(Boolean fueRespondida) {
+        this.fueRespondida = fueRespondida;
+    }
+
+    public Boolean getFueRechazada() {
+        return fueRechazada;
+    }
+
+    public void setFueRechazada(Boolean fueRechazada) {
+        this.fueRechazada = fueRechazada;
     }
 }

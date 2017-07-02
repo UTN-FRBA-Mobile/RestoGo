@@ -1,4 +1,4 @@
-package ar.com.utn.restogo;
+package ar.com.utn.restogo.cliente;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import ar.com.utn.restogo.R;
 
 public class FCMService extends FirebaseMessagingService {
 

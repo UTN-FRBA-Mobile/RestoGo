@@ -133,6 +133,7 @@ public class ReservarFragment extends Fragment {
                 reserva.setCantidadPersonas(textCantidad.getText().toString());
                 reserva.setDia(textDia.getText().toString());
                 reserva.setHora(textHora.getText().toString());
+                reserva.setFueRespondida(false);
                 reserva.setUssid(auth.getCurrentUser().getUid());
 
                 database.getReference("reservas/"+restaurante.getKey()).push().setValue(reserva);

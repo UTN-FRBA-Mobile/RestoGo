@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
@@ -39,6 +40,8 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -311,7 +314,7 @@ public class PublicarFragment extends Fragment {
         }
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
 
         final Restaurante restaurante = new Restaurante();
         restaurante.setDescripcion(descripcion);
@@ -349,13 +352,28 @@ public class PublicarFragment extends Fragment {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
                     restaurante.setUrl(downloadUrl.toString());
-                    database.getReference("restaurantes").push().setValue(restaurante);
+                    database.getReference("restaurantes").push().setValue(restaurante, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(DatabaseError databaseError,
+                                               DatabaseReference databaseReference) {
+                            String uniqueKey = databaseReference.getKey();
+                            database.getReference("provieder/"+auth.getCurrentUser().getUid()).push().setValue(uniqueKey);
+                        }
+                    });
                 }
             });
         } else {
             // Si no se cargo imagen, publica directo el restaurante
-            database.getReference("restaurantes").push().setValue(restaurante);
+            database.getReference("restaurantes").push().setValue(restaurante, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError,
+                                       DatabaseReference databaseReference) {
+                    String uniqueKey = databaseReference.getKey();
+                    database.getReference("provieder/"+auth.getCurrentUser().getUid()).push().setValue(uniqueKey);
+                }
+            });
         }
+        getActivity().getSupportFragmentManager().popBackStack("PublicarFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
     }
 
     /**

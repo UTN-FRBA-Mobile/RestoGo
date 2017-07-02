@@ -15,22 +15,118 @@
       },
       "oauth_client": [
         {
-          "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+          "client_id": "478336960932-rtebf9pr24g9iiqto77tpho8qconmoav.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "ar.com.utn.restogo",
             "certificate_hash": "f1c31e71d31b16c7f6e46204fcfc9b72e4c7b1ee"
           }
+        },
+        {
+          "client_id": "478336960932-7ijles22n9lrhemhok5ogg5vpjlaielr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.com.utn.restogo",
+            "certificate_hash": "684d590c22b321c4a7b8cd19aa1afdd353f81d97"
+          }
+        },
+        {
+          "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBElL4XZLrzdtgU1dBV4687K8n8J1q8i6k"
+          "current_key": "AIzaSyAbpwP1SP9tbDjcL5k90uTDhICw2hXW53U"
         }
       ],
       "services": {
         "analytics_service": {
           "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478336960932:android:738da0b958485c0a",
+        "android_client_info": {
+          "package_name": "ar.com.utn.restogo.provieder"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478336960932-0se43nh6mgeg07o57e7vus99pmj14jlv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ar.com.utn.restogo.provieder",
+            "certificate_hash": "684d590c22b321c4a7b8cd19aa1afdd353f81d97"
+          }
+        },
+        {
+          "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbpwP1SP9tbDjcL5k90uTDhICw2hXW53U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:478336960932:android:a66b1c63af732d29",
+        "android_client_info": {
+          "package_name": "ar.com.utn.restogo.cliente"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "478336960932-acdnb5kdnb21s95shev90j7k798mmsvd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbpwP1SP9tbDjcL5k90uTDhICw2hXW53U"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
