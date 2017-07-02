@@ -54,12 +54,14 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ViewHold
         holder.horaText.setText(unaReserva.getHora());
         holder.cantidadText.setText(unaReserva.getCantidadPersonas());
 
-        if (unaReserva.getFueRespondida()){
-            if (unaReserva.getFueRechazada()){
+        if (unaReserva.getFueRespondida()) {
+            if (unaReserva.getFueRechazada()) {
                 holder.panel.setBackgroundColor(Color.RED);
             } else {
                 holder.panel.setBackgroundColor(Color.GREEN);
             }
+        } else {
+            holder.panel.setBackgroundColor(Color.TRANSPARENT);
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +103,14 @@ public class ReservaAdapter extends RecyclerView.Adapter<ReservaAdapter.ViewHold
             keys.add(key);
             Integer position = keys.indexOf(key);
             reservas.add(reserva);
+            notifyDataSetChanged();
+        }
+    }
+
+    public void update(String key, Reserva reserva){
+        if (keys.contains(key)) {
+            Integer position = keys.indexOf(key);
+            reservas.set(position, reserva);
             notifyDataSetChanged();
         }
     }

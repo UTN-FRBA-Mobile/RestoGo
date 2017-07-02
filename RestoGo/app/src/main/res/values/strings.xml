@@ -73,4 +73,9 @@
 
     <string name="error_falta_fecha">Debe ingresar una fecha</string>
     <string name="error_falta_hora">Debe ingresar una hora</string>
+
+    <string name="aceptar">Aceptar</string>
+    <string name="rechazar">Rechazar</string>
+
+
 </resources>

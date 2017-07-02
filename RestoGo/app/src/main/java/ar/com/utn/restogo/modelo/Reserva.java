@@ -1,5 +1,7 @@
 package ar.com.utn.restogo.modelo;
 
+import com.google.firebase.database.Exclude;
+
 import java.io.Serializable;
 
 public class Reserva implements Serializable {
@@ -9,6 +11,11 @@ public class Reserva implements Serializable {
     private String cantidadPersonas;
     private Boolean fueRespondida;
     private Boolean fueRechazada;
+
+    @Exclude
+    private String keyRestaurante;
+    @Exclude
+    private String keyReserva;
 
     public String getUssid() {
         return ussid;
@@ -56,5 +63,25 @@ public class Reserva implements Serializable {
 
     public void setFueRechazada(Boolean fueRechazada) {
         this.fueRechazada = fueRechazada;
+    }
+
+    @Exclude
+    public String getKeyRestaurante() {
+        return keyRestaurante;
+    }
+
+    @Exclude
+    public void setKeyRestaurante(String keyRestaurante) {
+        this.keyRestaurante = keyRestaurante;
+    }
+
+    @Exclude
+    public String getKeyReserva() {
+        return keyReserva;
+    }
+
+    @Exclude
+    public void setKeyReserva(String keyReserva) {
+        this.keyReserva = keyReserva;
     }
 }

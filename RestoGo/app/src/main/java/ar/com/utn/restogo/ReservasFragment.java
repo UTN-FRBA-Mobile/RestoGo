@@ -119,7 +119,7 @@ public class ReservasFragment extends Fragment {
         });
     }
 
-    public void add(String key){
+    public void add(final String key){
         observer = new RecyclerView.AdapterDataObserver() {
             @Override
             public void onChanged() {
@@ -129,17 +129,23 @@ public class ReservasFragment extends Fragment {
             }
         };
         DatabaseReference reservasReference = database.getReference("reservas/" + key + "/");
-        reservasReference.orderByChild("fueRespondida").equalTo(false);
         reservasReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 Reserva reserva = dataSnapshot.getValue(Reserva.class);
                 String reservaKey = dataSnapshot.getKey();
+                reserva.setKeyRestaurante(key);
+                reserva.setKeyReserva(reservaKey);
                 mAdapter.add(reservaKey, reserva);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                Reserva reserva = dataSnapshot.getValue(Reserva.class);
+                String reservaKey = dataSnapshot.getKey();
+                reserva.setKeyRestaurante(key);
+                reserva.setKeyReserva(reservaKey);
+                mAdapter.update(reservaKey, reserva);
             }
 
             @Override
