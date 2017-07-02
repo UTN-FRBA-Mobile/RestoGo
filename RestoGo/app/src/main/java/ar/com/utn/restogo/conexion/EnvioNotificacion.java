@@ -13,24 +13,24 @@ public class EnvioNotificacion implements TaskListener  {
 
     private Map<String, String>  message;
     private String titulo;
-    private String email;
+    private String ussid;
 
     //Se va a usar cuando el Cliente haga un pedido y ademas cuando el Resurante le de el OK o no por el mismo
     public void sendNotificationToUser(Map<String, String> message, String titulo) {
         this.message = message;
         this.titulo = titulo;
         try {
-            email = Utils.parsearAJson(message.get("data")).get("destino").toString();
+            ussid = Utils.parsearAJson(message.get("data")).get("destino").toString();
         }
         catch(JSONException e){
             e.printStackTrace();
         }
 
-        ejecutarGetToken(email);
+        ejecutarGetToken(ussid);
     }
 
-    private void ejecutarGetToken(String email){
-        new TaskRequestUrl(EnvioNotificacion.this).execute(ConstructorUrls.armarUrlGetToken("Clientes", email), null, "GET");
+    private void ejecutarGetToken(String ussid){
+        new TaskRequestUrl(EnvioNotificacion.this).execute(ConstructorUrls.armarUrlGetToken("Clientes", ussid), null, "GET");
     }
 
     @Override

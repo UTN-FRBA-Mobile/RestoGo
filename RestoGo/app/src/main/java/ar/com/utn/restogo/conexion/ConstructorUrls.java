@@ -26,10 +26,10 @@ public class ConstructorUrls {
         return url;
     }
 
-    public static String getJSONUsuario(String email, String token){
+    public static String getJSONUsuario(String ussid, String token){
         JSONObject json = null;
         try{json = new JSONObject();
-            json.put("email",email);
+            json.put("ussid",ussid);
             json.put("token",token);
         }
         catch(JSONException je){
@@ -38,13 +38,13 @@ public class ConstructorUrls {
         return json.toString();
     }
 
-    public static String armarUrlGetToken(String path, String emailUsuario){
+    public static String armarUrlGetToken(String path, String ussid){
         Uri.Builder builder = new Uri.Builder();
 
             builder.scheme(PROTOCOLO)
                     .encodedAuthority(urlBase)
                     .appendPath(path)
-                    .appendPath(emailUsuario);
+                    .appendPath(ussid);
 
         String url = builder.build().toString();
         Log.d("ConstructorUrls", url);

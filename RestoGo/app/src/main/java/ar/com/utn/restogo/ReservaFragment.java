@@ -18,7 +18,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import ar.com.utn.restogo.adapter.OnLoadImage;
+import ar.com.utn.restogo.conexion.EnvioNotificacion;
 import ar.com.utn.restogo.modelo.Reserva;
 import ar.com.utn.restogo.modelo.Restaurante;
 import ar.com.utn.restogo.storage.ImageLoader;
@@ -78,6 +85,7 @@ public class ReservaFragment extends Fragment {
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
                 database.getReference("reservas/"+reserva.getKeyRestaurante()+"/"+reserva.getKeyReserva()+"/fueRespondida").setValue(true);
                 database.getReference("reservas/"+reserva.getKeyRestaurante()+"/"+reserva.getKeyReserva()+"/fueRechazada").setValue(false);
+                enviarNotificacionReserva(reserva, "¡Tu reserva fue aceptada!");
                 getActivity().getSupportFragmentManager().popBackStack("ReservaFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
@@ -86,12 +94,31 @@ public class ReservaFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
                 database.getReference("reservas/"+reserva.getKeyRestaurante()+"/"+reserva.getKeyReserva()+"/fueRespondida").setValue(true);
                 database.getReference("reservas/"+reserva.getKeyRestaurante()+"/"+reserva.getKeyReserva()+"/fueRechazada").setValue(true);
+                enviarNotificacionReserva(reserva, "Tu reserva fue rechazada.");
                 getActivity().getSupportFragmentManager().popBackStack("ReservaFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
+    }
+
+    private void enviarNotificacionReserva(Reserva reserva, String mensaje){
+        JSONObject json = null;
+        try{
+            json = new JSONObject();
+            json.put("destino", reserva.getUssid());
+            json.put("origen", reserva.getKeyRestaurante());
+        }
+        catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        Map respuestaCompleta = new HashMap<>();
+        respuestaCompleta.put("data", json.toString());
+        respuestaCompleta.put("text", mensaje);
+
+        EnvioNotificacion envio = new EnvioNotificacion();
+        envio.sendNotificationToUser(respuestaCompleta, getString(R.string.app_name));
     }
 
     @Override
