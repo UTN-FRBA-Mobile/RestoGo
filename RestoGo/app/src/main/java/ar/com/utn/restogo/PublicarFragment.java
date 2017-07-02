@@ -325,13 +325,13 @@ public class PublicarFragment extends Fragment {
         restaurante.setHoraCierre(horaCierre);
         restaurante.setComidas(comidas);
         restaurante.setUsuarioRestaurante(auth.getCurrentUser().getUid());
-        restaurante.setLunes(chkLun.isSelected());
-        restaurante.setMartes(chkMar.isSelected());
-        restaurante.setMiercoles(chkMier.isSelected());
-        restaurante.setJueves(chkJuev.isSelected());
-        restaurante.setViernes(chkVier.isSelected());
-        restaurante.setSabado(chkSab.isSelected());
-        restaurante.setDomingo(chkDom.isSelected());
+        restaurante.setLunes(chkLun.isChecked());
+        restaurante.setMartes(chkMar.isChecked());
+        restaurante.setMiercoles(chkMier.isChecked());
+        restaurante.setJueves(chkJuev.isChecked());
+        restaurante.setViernes(chkVier.isChecked());
+        restaurante.setSabado(chkSab.isChecked());
+        restaurante.setDomingo(chkDom.isChecked());
 
         if (currentPhotoPath != null) {
             // Si se cargo una imagen la sube y, si se subio bien, publica el restaurante
