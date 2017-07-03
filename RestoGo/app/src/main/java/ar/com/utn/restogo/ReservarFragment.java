@@ -183,7 +183,7 @@ public class ReservarFragment extends Fragment {
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
-            textDia.setText(new StringBuilder().append(pad(day)).append("/").append(pad(month)).append("/").append(pad(year)));
+            textDia.setText(new StringBuilder().append(pad(day)).append("/").append(pad(month +1)).append("/").append(pad(year)));
         }
     }
 
