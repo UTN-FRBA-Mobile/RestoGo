@@ -1,6 +1,7 @@
 # Aplicación - RestoGo
 
-Se trata de una aplicación amigable para poder encontrar restaurantes cercanos mediante tú ubicación para luego poder reservar en el horario que quieras !
+¡Se trata de una aplicación amigable para poder encontrar restaurantes cercanos mediante tú ubicación para luego poder reservar en el horario que quieras! 
+Tambien contamos con una version para los dueños de los restaurantes, asi pueden controlar las reservas que se hacen, con la posibilidad de aceptarlas o rechazarlas.
 
 Funcionalidades disponibles:
 
