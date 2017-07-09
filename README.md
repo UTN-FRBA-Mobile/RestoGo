@@ -13,15 +13,25 @@ Funcionalidades disponibles:
 * El usuario dueño del local recibe notificaciones por las reservas hechas y las confirma según corresponda.
 * Creación de un local en la app, indicando los tipos de comida, horarios y ubicación.
 
-Imágenes de la aplicación:
-![Login](../master/Capturas/login.png)
+Imágenes de la Aplicación:
 
-Propios aplicación Cliente: 
-![Listado Restaurantes](../master/Capturas/listadoRestaurantes.png)
-![Reservar](../master/Capturas/reservar.png)
-![Restaurante Detalle](../master/Capturas/restaurante.png)
-![Mapa](../master/Capturas/mapa.png)
+<p align="center">
+  <img src="https://github.com/UTN-FRBA-Mobile/RestoGo/blob/master/Capturas/login.png?raw=true" width="350"/>
+</p>
 
-Propios aplicación Dueño Restaurante:
-![Publicar](../master/Capturas/publicar.png)
-![Listado Reservas](../master/Capturas/listaReservas.png)
+Propias de la aplicación Cliente:
+<p align="center">
+  <img src="https://github.com/UTN-FRBA-Mobile/RestoGo/blob/master/Capturas/listadoRestaurantes.png?raw=true" width="350"/>
+  <img src="https://github.com/UTN-FRBA-Mobile/RestoGo/blob/master/Capturas/mapa.png?raw=true" width="350"/>
+</p>
+<p align="center">
+  <img src="https://github.com/UTN-FRBA-Mobile/RestoGo/blob/master/Capturas/restaurante.png?raw=true" width="350"/>
+  <img src="https://github.com/UTN-FRBA-Mobile/RestoGo/blob/master/Capturas/reservar.png?raw=true" width="350"/>
+</p>
+
+Propias de la aplicacion del Dueño del Restaurante:
+<p align="center">
+  <img src="https://github.com/UTN-FRBA-Mobile/RestoGo/blob/master/Capturas/listaReservas.png?raw=true" width="350"/>
+  <img src="https://github.com/UTN-FRBA-Mobile/RestoGo/blob/master/Capturas/publicar.png?raw=true" width="350"/>
+</p>
+
